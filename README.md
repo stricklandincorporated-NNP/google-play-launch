@@ -8,33 +8,39 @@ Every step says what to click, in what order, and *why it matters*. Every Google
 
 ## Install
 
-`/plugin` is a Claude Code slash command, and it only works in the **terminal CLI** — not in the VS Code extension, which will tell you "/plugin isn't available in this environment."
-
-So: open a standalone terminal (macOS Terminal, iTerm, Windows Terminal — not VS Code's integrated one) and start Claude Code:
+One line, in any terminal — Mac, Linux, or Windows via Git Bash/WSL. VS Code's built-in terminal is fine too:
 
 ```
-claude
+git clone https://github.com/stricklandincorporated-NNP/google-play-launch.git /tmp/gpl && mkdir -p ~/.claude/skills && cp -r /tmp/gpl/skills/google-play-launch ~/.claude/skills/ && rm -rf /tmp/gpl && echo "Installed. Restart Claude Code, then run /google-play-launch"
 ```
 
-Then, one at a time, at the Claude Code prompt:
+Restart Claude Code, then from any app project run:
+
+```
+/google-play-launch
+```
+
+That's it. The skill lands in `~/.claude/skills/`, so it works in every project and in the VS Code extension.
+
+<details>
+<summary>Alternative: install as a plugin instead</summary>
+
+Same result, more steps. `/plugin` is a Claude Code slash command that only works in the **terminal CLI** — in the VS Code extension it reports "/plugin isn't available in this environment."
+
+Open a standalone terminal (macOS Terminal, iTerm, Windows Terminal — not VS Code's integrated one), start Claude Code with `claude`, then at its prompt:
 
 ```
 /plugin marketplace add stricklandincorporated-NNP/google-play-launch
 ```
 
-Wait for that to finish, then:
+Wait for it to finish, then:
 
 ```
 /plugin install google-play-launch
 ```
 
-This installs globally to `~/.claude/plugins/`, so you only have to do it once — afterwards the skill is available in every project **and** in the VS Code extension.
-
-Restart Claude Code, then run:
-
-```
-/google-play-launch
-```
+Restart Claude Code and run `/google-play-launch`.
+</details>
 
 ## What you get
 
