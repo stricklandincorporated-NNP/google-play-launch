@@ -8,7 +8,9 @@ Every step says what to click, in what order, and *why it matters*. Every Google
 
 ## Install
 
-These are Claude Code slash commands — run them *inside* a Claude Code session, not at your regular terminal prompt. Start Claude Code first:
+`/plugin` is a Claude Code slash command, and it only works in the **terminal CLI** — not in the VS Code extension, which will tell you "/plugin isn't available in this environment."
+
+So: open a standalone terminal (macOS Terminal, iTerm, Windows Terminal — not VS Code's integrated one) and start Claude Code:
 
 ```
 claude
@@ -25,6 +27,8 @@ Wait for that to finish, then:
 ```
 /plugin install google-play-launch
 ```
+
+This installs globally to `~/.claude/plugins/`, so you only have to do it once — afterwards the skill is available in every project **and** in the VS Code extension.
 
 Restart Claude Code, then run:
 
