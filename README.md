@@ -8,8 +8,21 @@ Every step says what to click, in what order, and *why it matters*. Every Google
 
 ## Install
 
+These are Claude Code slash commands — run them *inside* a Claude Code session, not at your regular terminal prompt. Start Claude Code first:
+
+```
+claude
+```
+
+Then, one at a time, at the Claude Code prompt:
+
 ```
 /plugin marketplace add stricklandincorporated-NNP/google-play-launch
+```
+
+Wait for that to finish, then:
+
+```
 /plugin install google-play-launch
 ```
 
