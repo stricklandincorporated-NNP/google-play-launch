@@ -1,0 +1,11 @@
+{
+  "name": "google-play-launch",
+  "version": "1.0.0",
+  "description": "Ship an Android app to Google Play. Runs recon, automates every step that can be automated, and generates a beginner-readable walkthrough written for someone who has never shipped an app before.",
+  "author": {
+    "name": "Kalvin Strickland"
+  },
+  "license": "MIT",
+  "keywords": ["android", "google-play", "play-console", "gradle", "capacitor", "release"],
+  "skills": "./skills/"
+}

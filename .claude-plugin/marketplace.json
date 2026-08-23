@@ -1,0 +1,13 @@
+{
+  "name": "google-play-launch",
+  "owner": {
+    "name": "Kalvin Strickland"
+  },
+  "plugins": [
+    {
+      "name": "google-play-launch",
+      "source": "./"
+    }
+  ],
+  "description": "Google Play launch tooling — a complete, beginner-readable path from an empty Play Console account to a live listing."
+}

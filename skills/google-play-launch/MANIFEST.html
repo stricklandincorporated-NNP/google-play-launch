@@ -1,0 +1,2399 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>Google Play Launch Manifest</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ground: #f0efe9;
+    --surface: #ffffff;
+    --surface-2: #e7e5dc;
+    --ink: #1b1e22;
+    --ink-dim: #5b6069;
+    --ink-faint: #8a8f97;
+    --line: rgba(27,30,34,0.14);
+    --line-strong: rgba(27,30,34,0.28);
+    --accent: #b35c0a;
+    --accent-ink: #ffffff;
+    --accent-soft: rgba(179,92,10,0.10);
+    --good: #2f8f52;
+    --good-soft: rgba(47,143,82,0.12);
+    --tag-once-bg: rgba(70,90,140,0.12);
+    --tag-once-ink: #3d5a94;
+    --tag-app-bg: rgba(179,92,10,0.12);
+    --tag-app-ink: #b35c0a;
+    --tag-release-bg: rgba(47,143,82,0.12);
+    --tag-release-ink: #2f8f52;
+    --shadow: 0 1px 2px rgba(27,30,34,0.06), 0 8px 24px rgba(27,30,34,0.06);
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #14171c;
+      --surface: #1b1f26;
+      --surface-2: #242932;
+      --ink: #eceae3;
+      --ink-dim: #a3a9b3;
+      --ink-faint: #767c87;
+      --line: rgba(236,234,227,0.11);
+      --line-strong: rgba(236,234,227,0.22);
+      --accent: #ff9d3f;
+      --accent-ink: #1b1206;
+      --accent-soft: rgba(255,157,63,0.14);
+      --good: #5fbf7a;
+      --good-soft: rgba(95,191,122,0.14);
+      --tag-once-bg: rgba(122,150,220,0.16);
+      --tag-once-ink: #9db3ec;
+      --tag-app-bg: rgba(255,157,63,0.16);
+      --tag-app-ink: #ff9d3f;
+      --tag-release-bg: rgba(95,191,122,0.16);
+      --tag-release-ink: #5fbf7a;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+      color-scheme: dark;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #14171c;
+    --surface: #1b1f26;
+    --surface-2: #242932;
+    --ink: #eceae3;
+    --ink-dim: #a3a9b3;
+    --ink-faint: #767c87;
+    --line: rgba(236,234,227,0.11);
+    --line-strong: rgba(236,234,227,0.22);
+    --accent: #ff9d3f;
+    --accent-ink: #1b1206;
+    --accent-soft: rgba(255,157,63,0.14);
+    --good: #5fbf7a;
+    --good-soft: rgba(95,191,122,0.14);
+    --tag-once-bg: rgba(122,150,220,0.16);
+    --tag-once-ink: #9db3ec;
+    --tag-app-bg: rgba(255,157,63,0.16);
+    --tag-app-ink: #ff9d3f;
+    --tag-release-bg: rgba(95,191,122,0.16);
+    --tag-release-ink: #5fbf7a;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 48px 24px 120px;
+  }
+
+  header.top {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 10px;
+  }
+
+  h1 {
+    font-family: "Big Shoulders Display", sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
+    letter-spacing: -0.01em;
+    line-height: 0.96;
+    margin: 0 0 14px;
+    text-wrap: balance;
+  }
+
+  .dek {
+    color: var(--ink-dim);
+    font-size: 1.05rem;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .callout {
+    margin-top: 28px;
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+  }
+  .callout h2 {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 10px;
+    font-weight: 600;
+  }
+  .callout ul { margin: 0; padding-left: 0; list-style: none; }
+  .callout li {
+    display: flex;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 0.94rem;
+    color: var(--ink-dim);
+  }
+  .callout li b { color: var(--ink); font-weight: 600; }
+  .status-dot {
+    flex: none;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-top: 7px;
+    background: var(--ink-faint);
+  }
+  .status-dot.done { background: var(--good); }
+  .status-dot.todo { background: var(--accent); }
+
+  .howto-modes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 24px;
+    margin-top: 2px;
+  }
+  .howto-mode p { margin: 6px 0; color: var(--ink-dim); font-size: 0.92rem; }
+  .howto-label {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin: 0 0 6px !important;
+  }
+  .prompt-box {
+    margin: 8px 0;
+    padding: 10px 12px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.82rem;
+    color: var(--ink);
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  @media (max-width: 640px) {
+    .howto-modes { grid-template-columns: 1fr; }
+  }
+
+  nav.toc {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 6px 18px;
+  }
+  nav.toc a {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    color: var(--ink-dim);
+    text-decoration: none;
+    font-size: 0.88rem;
+    padding: 3px 0;
+    border-bottom: 1px solid transparent;
+  }
+  nav.toc a:hover, nav.toc a:focus-visible { color: var(--accent); }
+  nav.toc a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  nav.toc .num {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+  }
+
+  .progress-bar {
+    margin-top: 20px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--accent);
+    transition: width 0.3s ease;
+  }
+  .progress-label {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .reset-btn {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.76rem;
+    background: none;
+    border: 1px solid var(--line-strong);
+    color: var(--ink-dim);
+    border-radius: 6px;
+    padding: 4px 9px;
+    cursor: pointer;
+  }
+  .reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .reset-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  section.phase {
+    margin-top: 28px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    scroll-margin-top: 20px;
+  }
+  section.phase.agent-phase {
+    border-top: 3px solid var(--accent);
+  }
+
+  .phase-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 22px 24px 18px;
+    border-bottom: 1px solid var(--line);
+  }
+  .phase-no {
+    font-family: "Big Shoulders Display", sans-serif;
+    font-weight: 800;
+    font-size: 2.6rem;
+    line-height: 0.85;
+    color: var(--accent);
+    flex: none;
+    min-width: 52px;
+  }
+  .phase-title-wrap { flex: 1; min-width: 0; }
+  .phase-title {
+    font-family: "Big Shoulders Display", sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: -0.005em;
+    margin: 2px 0 8px;
+    text-wrap: balance;
+  }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .tag.once { background: var(--tag-once-bg); color: var(--tag-once-ink); }
+  .tag.app { background: var(--tag-app-bg); color: var(--tag-app-ink); }
+  .tag.release { background: var(--tag-release-bg); color: var(--tag-release-ink); }
+  .tag.agent { background: var(--accent); color: var(--accent-ink); }
+  .tag.auto { background: var(--good-soft); color: var(--good); margin-left: 6px; }
+
+  .phase-body { padding: 6px 24px 22px; }
+  .phase-body > p.intro {
+    color: var(--ink-dim);
+    font-size: 0.95rem;
+    margin: 12px 0 16px;
+    max-width: 62ch;
+  }
+
+  .phase-body a, .callout a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-color: var(--line-strong);
+    text-underline-offset: 2px;
+  }
+  .phase-body a:hover, .callout a:hover { text-decoration-color: currentColor; }
+  .phase-body a:focus-visible, .callout a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  ul.steps { list-style: none; margin: 0; padding: 0; }
+  ul.steps > li {
+    border-top: 1px solid var(--line);
+    padding: 12px 0;
+  }
+  ul.steps > li:first-child { border-top: none; padding-top: 8px; }
+
+  .step-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+  }
+  .step-row:has(input:disabled) { cursor: default; }
+  .step-row input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    flex: none;
+    width: 19px; height: 19px;
+    margin-top: 2px;
+    border: 1.5px solid var(--line-strong);
+    border-radius: 5px;
+    background: var(--surface);
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+  }
+  .step-row input[type="checkbox"]:disabled { cursor: default; opacity: 1; }
+  .step-row input[type="checkbox"]::before {
+    content: "";
+    width: 10px; height: 10px;
+    transform: scale(0);
+    transition: transform 0.12s ease;
+    background: var(--good);
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 45% 65%);
+  }
+  .step-row input[type="checkbox"]:checked {
+    border-color: var(--good);
+  }
+  .step-row input[type="checkbox"]:checked::before { transform: scale(1); }
+  .step-row input[type="checkbox"]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .step-text { flex: 1; min-width: 0; }
+  .step-title {
+    font-weight: 600;
+    font-size: 0.98rem;
+  }
+  .step-title .tag { text-decoration: none; }
+  li:has(input:checked) .step-title {
+    color: var(--ink-faint);
+    text-decoration: line-through;
+    text-decoration-color: var(--line-strong);
+  }
+  .step-detail {
+    color: var(--ink-dim);
+    font-size: 0.89rem;
+    margin-top: 4px;
+    line-height: 1.55;
+  }
+  .step-detail code, .inline-code {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.85em;
+    background: var(--surface-2);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--ink);
+  }
+  .done-note {
+    display: block;
+    color: var(--ink-dim);
+    font-size: 0.89rem;
+    margin-top: 4px;
+    font-style: italic;
+  }
+  .done-note::before { content: "\2192  "; color: var(--ink-faint); font-style: normal; }
+
+  .fact-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0 6px;
+    font-size: 0.88rem;
+  }
+  .fact-table th {
+    text-align: left;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 600;
+    padding: 0 10px 8px 0;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .fact-table td {
+    padding: 9px 10px 9px 0;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+    color: var(--ink-dim);
+  }
+  .fact-table td:first-child { color: var(--ink); font-weight: 500; white-space: nowrap; }
+  .fact-table .num { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; color: var(--ink); }
+
+  .note {
+    margin: 14px 0 4px;
+    padding: 12px 14px;
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    font-size: 0.88rem;
+    color: var(--ink-dim);
+  }
+  .note b { color: var(--ink); }
+  .note a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 2px; }
+  .note a:hover { text-decoration-color: currentColor; }
+
+  footer.end {
+    margin-top: 44px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    color: var(--ink-faint);
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  footer.end a { color: var(--ink-dim); }
+
+  @media (max-width: 560px) {
+    .wrap { padding: 32px 16px 100px; }
+    .phase-head { padding: 18px 16px 14px; gap: 12px; }
+    .phase-body { padding: 4px 16px 18px; }
+    .phase-no { font-size: 2rem; min-width: 40px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+  }
+
+  /* ── step body: everything under the checkbox label ─────────────────
+     Detail text and links live OUTSIDE the label element on purpose: inside
+     it, clicking a link or a disclosure also toggles the checkbox. */
+  .step-body { padding-left: 31px; }
+
+  .step-body > .step-detail:first-child { margin-top: 4px; }
+
+  .path {
+    display: block;
+    margin-top: 7px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.79rem;
+    line-height: 1.7;
+    color: var(--ink);
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 7px 10px;
+    overflow-x: auto;
+  }
+  .path b {
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.86em;
+    margin-right: 6px;
+  }
+
+  details.why {
+    margin-top: 8px;
+    border-left: 2px solid var(--line-strong);
+    padding-left: 13px;
+  }
+  details.why > summary {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--accent);
+    cursor: pointer;
+    list-style: none;
+    padding: 2px 0;
+    user-select: none;
+  }
+  details.why > summary::-webkit-details-marker { display: none; }
+  details.why > summary::before {
+    content: "\25B8";
+    display: inline-block;
+    margin-right: 6px;
+    transition: transform 0.15s ease;
+  }
+  details.why[open] > summary::before { transform: rotate(90deg); }
+  details.why > summary:hover { color: var(--ink); }
+  details.why > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+  details.why p {
+    margin: 7px 0 3px;
+    font-size: 0.88rem;
+    line-height: 1.62;
+    color: var(--ink-dim);
+    max-width: 64ch;
+  }
+  details.why p:last-child { margin-bottom: 6px; }
+  details.why b { color: var(--ink); }
+  details.why a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 2px; }
+
+  .why-all {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.76rem;
+    background: none;
+    border: 1px solid var(--line-strong);
+    color: var(--ink-dim);
+    border-radius: 6px;
+    padding: 4px 9px;
+    cursor: pointer;
+    margin-right: 8px;
+  }
+  .why-all:hover { border-color: var(--accent); color: var(--accent); }
+  .why-all:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .progress-label .btns { display: flex; gap: 8px; }
+
+  /* ── prep / appendix sections ─────────────────────────────────────── */
+  section.phase.prep-phase { border-top: 3px solid var(--ink-faint); }
+  section.phase.prep-phase .phase-no,
+  section.phase.appendix .phase-no { font-size: 1.5rem; line-height: 1.2; letter-spacing: 0.06em; }
+  section.phase.appendix { border-top: 3px solid var(--line-strong); }
+
+  .kv { margin: 0; }
+  .kv dt {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-top: 16px;
+    color: var(--ink);
+  }
+  .kv dt:first-child { margin-top: 4px; }
+  .kv dd {
+    margin: 4px 0 0;
+    font-size: 0.89rem;
+    color: var(--ink-dim);
+    line-height: 1.6;
+    max-width: 66ch;
+  }
+  .kv dd code, .kv dd .inline-code {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.85em;
+    background: var(--surface-2);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--ink);
+  }
+
+  .fact-table td .inline-code { white-space: nowrap; }
+  .fact-table.wide td:first-child { white-space: normal; }
+  .table-scroll { overflow-x: auto; margin: 14px 0 6px; }
+  .table-scroll .fact-table { margin: 0; min-width: 460px; }
+
+  .note.warn {
+    background: rgba(190,60,40,0.09);
+    border-left-color: #be3c28;
+  }
+  :root[data-theme="dark"] .note.warn,
+  :root:not([data-theme="light"]) .note.warn { background: rgba(255,120,95,0.12); border-left-color: #ff785f; }
+
+  .linkcols {
+    columns: 2;
+    column-gap: 28px;
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .linkcols li {
+    break-inside: avoid;
+    font-size: 0.88rem;
+    padding: 4px 0;
+    color: var(--ink-dim);
+  }
+  .linkcols li a { display: block; }
+  @media (max-width: 640px) { .linkcols { columns: 1; } }
+</style>
+<div class="wrap">
+
+  <header class="top">
+    <p class="eyebrow">Android &middot; Google Play Console &middot; Every app you ship</p>
+    <h1>Google Play Launch Manifest</h1>
+    <p class="dek">The full path from nothing to a live Google Play listing — written for someone who has never done this before. Every step says what to click, in what order, and <em>why it exists</em>. Phase 00 is what an agent can do for you unattended; everything after is tagged for how often you'll do it yourself. Every link here was checked before this file shipped.</p>
+
+    <div class="callout howto">
+      <h2>How to use this</h2>
+      <div class="howto-modes">
+        <div class="howto-mode">
+          <p class="howto-label">With an agent</p>
+          <p>In Claude Code, from this project's root:</p>
+          <pre class="prompt-box"><code>/google-play-launch</code></pre>
+          <p>Or in plain words: <em>&ldquo;get this app ready for Google Play.&rdquo;</em></p>
+          <p>It runs recon, writes <span class="inline-code">GOOGLE-PLAY-PLAN.md</span>, then works through Phase 00 below — ticking off each item as it lands, and copying this file to <span class="inline-code">store-assets/MANIFEST.html</span> so the checklist lives with the app it describes.</p>
+        </div>
+        <div class="howto-mode">
+          <p class="howto-label">Solo</p>
+          <p>Phase 00 is agent work &mdash; skip it. Start at <a href="#prep">Before you begin</a> and follow every linked step yourself; nothing below requires the skill or any coding.</p>
+          <p>Your ticks are saved in this browser. Every step has a <span class="inline-code">&#9656; Why</span> toggle &mdash; open it when a step doesn't make sense, or hit <b>Expand every &ldquo;why&rdquo;</b> below to read the whole thing as a guide.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h2>Before you commit to a launch date</h2>
+      <p style="color:var(--ink-dim);font-size:0.9rem;margin:0 0 4px">If you read one fact in this file, read this one.</p>
+      <div class="table-scroll">
+        <table class="fact-table wide">
+          <tbody>
+            <tr><td>What it costs</td><td>$25, <b>once</b>, ever</td></tr>
+            <tr><td>Computer you need</td><td>Any: Windows, Mac or Linux</td></tr>
+            <tr><td>What you upload</td><td>An <span class="inline-code">.aab</span> Android App Bundle</td></tr>
+            <tr><td>Mandatory testing first</td><td><b>Often yes.</b> Personal accounts made after Nov 13 2023 need 12 testers opted in for 14 continuous days before they may publish at all</td></tr>
+            <tr><td>Identity check</td><td>ID + address verification for everyone; D-U-N-S for organizations</td></tr>
+            <tr><td>Review time</td><td>Hours to ~7 days; the first one is the slowest</td></tr>
+            <tr><td>Permanent, unchangeable</td><td>Package name (applicationId) <b>and</b> free-vs-paid</td></tr>
+            <tr><td>Store's cut</td><td>30%, or 15% on your first $1M/yr</td></tr>
+            <tr><td>Realistic first launch</td><td><b>3&ndash;6 weeks</b> &mdash; the 14-day closed test dominates everything</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">If a closed test applies to your account, recruit the 12 testers on day one — it's the single longest item in this entire file, and it can't be compressed. Everything else can happen while that clock runs.</div>
+    </div>
+
+    <!-- AGENT: replace this block with this repo's actual status -->
+    <div class="callout">
+      <h2>This app</h2>
+      <ul>
+        <li><span class="status-dot todo"></span><span>Not yet run. Paste the agent prompt above, or start at <a href="#prep">Before you begin</a> if you're going solo.</span></li>
+      </ul>
+    </div>
+
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label">
+      <span id="progressText">0 / 0 checked</span>
+      <span class="btns">
+        <button class="why-all" id="whyAllBtn" type="button">Expand every &ldquo;why&rdquo;</button>
+        <button class="reset-btn" id="resetBtn" type="button">Reset checklist</button>
+      </span>
+    </div>
+
+    <nav class="toc" aria-label="Phases">
+      <a href="#p0"><span class="num">AGENT</span> Agent run</a>
+      <a href="#prep"><span class="num">PREP</span> Before you begin</a>
+      <a href="#p1"><span class="num">01</span> Developer accounts</a>
+      <a href="#p2"><span class="num">02</span> Agreements, tax &amp; money</a>
+      <a href="#p3"><span class="num">03</span> Set up your computer</a>
+      <a href="#p4"><span class="num">04</span> Register the app</a>
+      <a href="#p5"><span class="num">05</span> Build the release</a>
+      <a href="#p6"><span class="num">06</span> Test before release</a>
+      <a href="#p7"><span class="num">07</span> Store listing content</a>
+      <a href="#p8"><span class="num">08</span> Privacy &amp; compliance</a>
+      <a href="#p9"><span class="num">09</span> Pricing &amp; availability</a>
+      <a href="#p10"><span class="num">10</span> Submit for review</a>
+      <a href="#p11"><span class="num">11</span> Release &amp; monitor</a>
+      <a href="#p12"><span class="num">12</span> Monetization (optional)</a>
+      <a href="#p13"><span class="num">13</span> Your next app</a>
+      <a href="#gloss"><span class="num">A</span> Glossary</a>
+      <a href="#trouble"><span class="num">B</span> When it goes wrong</a>
+      <a href="#links"><span class="num">C</span> Every link</a>
+    </nav>
+  </header>
+
+
+  <section class="phase agent-phase" id="p0">
+    <div class="phase-head">
+      <div class="phase-no">00</div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Agent run</div>
+        <div class="tags"><span class="tag agent">Agent · unattended</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <p class="intro">One agent pass covers all the local work — recon, icons, splash screens, config files, screenshots and drafted listing copy.</p>
+        <ul class="steps">
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="both-recon"><span class="step-text"><span class="step-title">Recon &mdash; identify the stack and the native target, write <span class="inline-code">GOOGLE-PLAY-PLAN.md</span></span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Detects whether this is a native Gradle project, Capacitor, Expo, React Native or Flutter app &mdash; or a web app that needs a native shell added. Writes a short plan naming what will change and what needs a human, before touching anything.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Every later step branches on the answer. The command that builds a Flutter app is not the one that builds a Capacitor app, and the file an icon lands in differs by stack. Writing the plan first also gives you a chance to say &ldquo;no, don't do that&rdquo; before anything on disk changes.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="both-facts"><span class="step-text"><span class="step-title"><span class="inline-code">docs/STORE-FACTS.md</span> &mdash; network, storage and SDK facts, grepped not guessed</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">One pass over the real source for <span class="inline-code">fetch(</span>, <span class="inline-code">XMLHttpRequest</span>, <span class="inline-code">WebSocket</span>, analytics and ad SDK imports, storage key namespaces, and every permission actually declared. Google's Data safety form is answered from this one file.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Answering the Data safety form from memory, days or months after writing the code, is how it ends up disagreeing with what the app actually does &mdash; exactly the kind of mismatch that surfaces after launch, when fixing it means a new submission.</p>
+              <p>Writing the facts down once also means next release you re-check a file instead of re-remembering an app.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="both-privacy-policy"><span class="step-text"><span class="step-title"><span class="inline-code">store-assets/privacy-policy.html</span> drafted</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">A plain-HTML policy naming what is collected, what stays on the device, what leaves it, and how to contact you. Play wants a public URL to it, not a separate document.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Play rejects a listing with no privacy policy URL, and will remove an app whose policy URL later 404s. A single file hosted anywhere public &mdash; GitHub Pages is free and fine &mdash; satisfies it.</p>
+              <p>Keeping it as one document is the point: a policy that drifts from what the Data safety form says is exactly what a reviewer catches.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="both-bundle-audit"><span class="step-text"><span class="step-title">Production bundle audited &mdash; no dev tooling, debug endpoints or editor shims</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Greps the <em>built</em> output, not the config file that claims to exclude things.</span>
+            <details class="why"><summary>Why</summary>
+              <p>A build flag that is supposed to strip dev tooling can silently stop working, and the config will keep claiming it is excluded. Auditing the artifact itself is the only check that actually holds &mdash; and a debug endpoint or an unlocked paywall in a public build is a security problem, not a cosmetic one.</p>
+            </details>
+          </div>
+        </li>
+
+        </ul>
+
+      <p class="intro">Everything an agent can do for you before you ever need a Play Console account. All local repo work — recon, generated assets, config edits, and drafted copy. See the <span class="inline-code">google-play-launch</span> skill for the exact procedure and the commands behind each item. <b>Going solo? Skip to <a href="#prep">Before you begin</a>.</b></p>
+      <ul class="steps">
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-a-android-project"><span class="step-text"><span class="step-title">Android project exists and builds (<span class="inline-code">android/</span> with Gradle, or equivalent)</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Scaffolded if missing, with whichever tool the detected stack calls for. Confirmed to build before anything else proceeds.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Google Play does not accept websites, React projects, or zip files — it accepts a signed Android App Bundle, and only an Android/Gradle project can produce one. The &ldquo;Android project&rdquo; is the Gradle-shaped wrapper that turns your app into that bundle. Without it there is literally nothing to upload.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-a-identity"><span class="step-text"><span class="step-title">App identity — package name, display name, <span class="inline-code">versionCode</span>/<span class="inline-code">versionName</span> set everywhere</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">The package name (<span class="inline-code">applicationId</span>) is asked, never invented — it's a reverse-DNS identifier you can't change after your first upload, and anything still on <span class="inline-code">com.example.*</span> is refused by Play outright. Display name and version numbers are kept consistent across the Gradle config and any framework config that mirrors them.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Multi-stack projects store the same three facts in two or three places (<span class="inline-code">build.gradle</span>, plus something like <span class="inline-code">capacitor.config.json</span> or <span class="inline-code">app.json</span>). When they drift, you get a build that installs under one name and reports another — and Play Console rejects the upload with a mismatch error that doesn't say which file is wrong.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-a-icon"><span class="step-text"><span class="step-title">App icon generated — 512×512 store icon plus adaptive launcher icons in every density</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Rasterized from a source SVG/PNG, then generated into <span class="inline-code">res/mipmap-*</span> (including the adaptive foreground/background layers) plus a 512×512 PNG for the Play listing.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Android launchers show the &ldquo;adaptive&rdquo; icon — two layers the launcher masks into whatever shape the device uses — while the store listing shows a separate 512×512 upload. Unlike Apple, <b>Google applies the corner rounding itself</b>, so a full-square icon is correct and pre-rounded corners come out visibly wrong. Miss a density and older devices show a blurry upscale of the wrong size.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-a-splash"><span class="step-text"><span class="step-title">Splash screen generated, light + dark</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Splash variants land in the drawable resources; on Android 12+ the system splash API crops the mark into a centered circle, so the source art keeps the logo inside the middle third.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Android shows the splash for the second or two before your app draws anything. If it's missing or broken, the app opens to a blank flash — which reads as &ldquo;broken&rdquo; in review and to every first-time user. The Android-12 circle crop is the gotcha: art that looked fine on Android 11 gets its edges cut off on every modern device.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-a-manifest"><span class="step-text"><span class="step-title"><span class="inline-code">AndroidManifest.xml</span> — orientation lock, permission audit</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Orientation locked on the main activity where the app is single-orientation; the <em>merged</em> permission list audited and anything the app doesn't genuinely use removed.</span>
+            <details class="why"><summary>Why</summary>
+              <p><span class="inline-code">AndroidManifest.xml</span> is the app's ID card — Android reads it before running a single line of your code. Permissions are the part with consequences: every one you declare shows on your store listing, widens the Data safety form, and some (SMS, call log, background location, all-files access) trigger extra Play declarations and likely rejection. Libraries silently inject their own permissions into the merged manifest, which is why the audit reads the merge, not just your source file.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-a-target-api"><span class="step-text"><span class="step-title"><span class="inline-code">targetSdkVersion</span> meets Play's current floor</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Checked against Google's live requirement page, not a remembered number — the floor rises every August 31.</span>
+            <span class="path"><b>Current floor</b> <a href="https://support.google.com/googleplay/android-developer/answer/11926878" target="_blank" rel="noopener">Target API level requirements</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>Google requires apps to target a recent Android version — roughly &ldquo;within one year of the latest release&rdquo; — and enforces it at upload: a bundle targeting below the floor is refused before any human ever sees it. As of August 31, 2026 the floor for new apps is Android 16 (API 36). This is also the single most common failure for someone returning to a project after a year away, which is why it gets its own box.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-a-listing"><span class="step-text"><span class="step-title"><span class="inline-code">store-assets/play-listing.md</span> drafted with live character counts</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">App name, short description, and full description — each checked against Google's field limits (30 / 80 / 4000 characters), not estimated.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Play Console refuses over-length fields, and you'll be editing them in a cramped web form. Drafting them in a file first means you paste finished text instead of writing marketing copy inside a browser text box at 11pm. On Play the copy also <em>is</em> your search strategy — there's no separate keyword field, so the description text does double duty.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-a-feature-graphic"><span class="step-text"><span class="step-title">Feature graphic composed — 1024×500</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Play-only, required, and no icon generator makes it: a 1024×500 banner composed from the app's mark and name on a brand background.</span>
+            <details class="why"><summary>Why</summary>
+              <p>The feature graphic is the wide image at the top of your Play listing, and Play Console won't let you publish without one. It has no iOS equivalent, which is exactly why it gets forgotten until the final form blocks on it. It's also what Google uses if the app is ever featured or shown with a video thumbnail — a lazy solid rectangle is a real cost, not a formality.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-a-screenshots"><span class="step-text"><span class="step-title">Screenshots captured to Play's specs</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Automated where the stack allows it — headless Chromium for a web-shell app (Android's WebView is Chromium), the emulator's <span class="inline-code">adb screencap</span> for a native one. At least 2 phone shots, up to 8; JPEG or 24-bit PNG with no alpha channel; each side between 320px and 3840px.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Play is looser than Apple about exact pixel sizes but strict about format — a PNG with an alpha channel is silently refused. Automating the set also means you can re-shoot everything in seconds when the UI changes, instead of hand-cropping phone screenshots. Tablet sets (7&Prime; and 10&Prime;) only matter if you want Play to present the app as tablet-optimized.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-a-build-gate"><span class="step-text"><span class="step-title">Build gate — <span class="inline-code">gradlew assembleDebug</span> compiles, tests + lint pass</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Never reported done without actually being run. If a step can't run in this environment (no JDK, no Android SDK), that's stated plainly instead of assumed.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Everything above edits native config files. A config edit that looks right and breaks the build is normal, not exotic — and you'd otherwise discover it in Android Studio an hour later with no idea which of a dozen changes caused it.</p>
+            </details>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </section>
+
+  <section class="phase prep-phase" id="prep">
+    <div class="phase-head">
+      <div class="phase-no">PREP</div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Before you begin</div>
+        <div class="tags"><span class="tag once">Read once · start here if you're new</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <p class="intro">Nothing to do here — just the things that surprise people on day one. Five minutes of reading that saves <em>two weeks</em> of confusion, because Android's biggest wait is one almost nobody knows about going in.</p>
+
+      <ul class="steps">
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-prep-computer"><span class="step-text"><span class="step-title">Any computer works — Windows, Mac, or Linux</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Android Studio runs on all three, and everything in this checklist can be done from any of them. You don't strictly need an Android phone either — the emulator covers most testing — but one real device is strongly recommended, and you'll want it anyway as one of your own test installs.</span>
+            <details class="why"><summary>Why</summary>
+              <p>This is the mirror image of iOS, where a Mac is mandatory. Android's build tools are free and cross-platform, which is why the barrier to entry here is money-cheap and <em>calendar</em>-expensive — the waits below, not the hardware, are what gate you.</p>
+              <p>The real device matters for two reasons: emulators don't reproduce real performance, cameras, or notification behavior; and when you recruit testers in Phase 06, being able to verify the opt-in flow on an actual phone yourself saves a round-trip through every confused tester.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-prep-sites"><span class="step-text"><span class="step-title">Learn the two websites — they are different, and you'll need both</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">People lose hours to this. Bookmark both now.</span>
+            <span class="path"><b>Your apps</b> <a href="https://play.google.com/console/" target="_blank" rel="noopener">play.google.com/console</a> — the Play Console: app records, listings, releases, testers, declarations, money.</span>
+            <span class="path"><b>How to build</b> <a href="https://developer.android.com/" target="_blank" rel="noopener">developer.android.com</a> — Android Studio, SDK docs, signing and bundle documentation.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Roughly: <b>developer.android.com is about building the app</b> (tools, code, packaging), and <b>the Play Console is about shipping it</b> (what the public sees, what builds exist, what you get paid). Google's help center for the Console is a third place — <a href="https://support.google.com/googleplay/android-developer/" target="_blank" rel="noopener">Play Console Help</a> — and almost every &ldquo;I can't find that setting&rdquo; moment ends there.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-prep-cost"><span class="step-text"><span class="step-title">Know what it costs</span></span></label>
+          <div class="step-body">
+            <div class="table-scroll">
+              <table class="fact-table wide">
+                <thead><tr><th>What</th><th>Cost</th><th>How often</th></tr></thead>
+                <tbody>
+                  <tr><td>Play Console developer registration</td><td class="num">$25 USD</td><td><b>Once, ever.</b> Covers unlimited apps under that account. No annual renewal.</td></tr>
+                  <tr><td>Everything in this checklist</td><td class="num">$0</td><td>Testing tracks, pre-launch reports, Play Console, Android Studio, submissions and re-submissions are all included.</td></tr>
+                  <tr><td>A domain to host your privacy policy &amp; support page</td><td class="num">~$10–15</td><td>Per year, optional — GitHub Pages or any free static host works instead.</td></tr>
+                  <tr><td>Google's cut of paid apps / in-app purchases</td><td class="num">15–30%</td><td>Per sale — <b>15%</b> on your first $1M/year once you enroll in the reduced <a href="https://support.google.com/googleplay/android-developer/answer/112622" target="_blank" rel="noopener">service fee</a> tier, and 15% for auto-renewing subscriptions from day one. Free apps with no purchases: nothing.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <details class="why"><summary>Why</summary>
+              <p>The $25 is the whole price of admission, one time, forever — the sharpest contrast with Apple's $99 every year. What Google charges you instead is <em>time</em>: the verification and testing gates in the next row. Budget calendar days, not dollars.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-prep-time"><span class="step-text"><span class="step-title">Know what waits for what — one of these is two weeks long</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Actual work is a few hours. Calendar time is longer, because several things are out of your hands — and one of them, the closed-test requirement on new personal accounts, is a hard 14-day clock. Start the slow ones first.</span>
+            <div class="table-scroll">
+              <table class="fact-table wide">
+                <thead><tr><th>Waiting on</th><th>Typical</th><th>Start it</th></tr></thead>
+                <tbody>
+                  <tr><td>Identity verification (all accounts)</td><td>Hours to a few days</td><td>Day one — publishing is blocked until it clears.</td></tr>
+                  <tr><td>D-U-N-S Number (Organization accounts only)</td><td>Days to a few weeks</td><td>First. Before anything else.</td></tr>
+                  <tr><td><b>Closed test — 12 testers × 14 days</b> (personal accounts created after Nov 13, 2023)</td><td><b>14 days minimum</b>, plus recruiting time</td><td>The moment you have any build at all. This is the long pole of the whole launch.</td></tr>
+                  <tr><td>Production access application (after that test)</td><td>A few days</td><td>Immediately when the 14 days complete.</td></tr>
+                  <tr><td>First-app review</td><td>Hours to ~7 days; longer for brand-new accounts</td><td>Per submission. Never plan a launch on an exact hour.</td></tr>
+                  <tr><td>Payments profile &amp; tax verification (if charging)</td><td>A few business days</td><td>Right after registration, not the night before launch.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <details class="why"><summary>Why</summary>
+              <p>The tester requirement is the one nobody sees coming: a personal Play Console account created after November 13, 2023 <b>cannot publish to production at all</b> until it has run a closed test with at least 12 testers opted in continuously for 14 days, then applied for production access and been approved. There is no fee to skip it and no fast lane. Recruiting 12 real people, getting them all opted in, and keeping them opted in is genuinely the hardest part of a first Android launch — <a href="https://support.google.com/googleplay/android-developer/answer/14151465" target="_blank" rel="noopener">the requirement</a>, and Google's own <a href="https://support.google.com/googleplay/android-developer/community-guide/255621488" target="_blank" rel="noopener">community guide to it</a>, are worth reading before day one. Organization accounts are exempt, which is a real argument for registering as one if you have a legal entity.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-prep-permanent"><span class="step-text"><span class="step-title">Know the three permanent decisions</span></span></label>
+          <div class="step-body">
+            <span class="step-detail"><b>1.</b> The package name can never change after first upload. <b>2.</b> A free app can never become paid — not ever; the only path to charging later is in-app purchases. <b>3.</b> Your developer name is public on every listing — and if you sell anything, personal accounts show your <em>legal name and address</em> publicly.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Each of these is a one-way door people walk through casually. The free→paid lock surprises the most: Apple lets you change price freely, Google locks &ldquo;free&rdquo; permanently the moment you publish, so if there's any chance you'll charge for the app itself, decide <em>before</em> Phase 04. The public-address rule surprises second — it's a consumer-protection requirement, and the only way around it for an individual is a registered business entity (or a mailbox address that is legally yours).</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-prep-vocab"><span class="step-text"><span class="step-title">Skim the <a href="#gloss">glossary</a> — six words do most of the damage</span></span></label>
+          <div class="step-body">
+            <span class="step-detail"><b>Package name</b>, <b>AAB</b>, <b>keystore</b>, <b>upload key</b>, <b>versionCode</b>, <b>track</b>. Google's own screens assume you already know these.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Google's error messages are written for people who already speak this vocabulary — &ldquo;Your Android App Bundle is signed with the wrong key&rdquo; means nothing until you know what an upload key is and that there are two keys in play. Ten minutes in <a href="#gloss">Appendix A</a> makes every error message in this process readable.</p>
+            </details>
+          </div>
+        </li>
+
+      </ul>
+
+      <div class="note">Google changes fees, required asset sizes, target-API floors and questionnaire wording regularly. Everything here was accurate when written, but <b>the live Play Console screen always wins</b> over any checklist, including this one. When a number here disagrees with what's on your screen, believe your screen.</div>
+    </div>
+  </section>
+
+  <section class="phase" id="p1">
+    <div class="phase-head">
+      <div class="phase-no">01</div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Developer accounts</div>
+        <div class="tags"><span class="tag once">One-time · per person or company</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <p class="intro">Everything downstream — every app you ever ship — hangs off this one registration. Get the account type right the first time: it decides whether the 12-tester gate applies to you, and changing it later means a new account and migrating your apps.</p>
+      <ul class="steps">
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p1-1"><span class="step-text"><span class="step-title">Create (or pick) the Google account you'll use as the developer account</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Use an email you'll still control in five years — this account becomes the permanent owner of everything.</span>
+            <span class="path"><b>Go</b> <a href="https://accounts.google.com/" target="_blank" rel="noopener">accounts.google.com</a> — create or sign in to the account you'll register with</span>
+            <details class="why"><summary>Why</summary>
+              <p>This account owns the membership, the apps, and the money. Transferring apps between accounts is possible but slow and conditional, and losing access to the underlying Google account can mean losing the developer account with it.</p>
+              <p>Two practical warnings. First, don't use a personal account you share across your life — you'll be granting it to build tools and possibly teammates. Second, if you might ever hire or sell, an address like <span class="inline-code">dev@yourcompany.com</span> beats a personal Gmail, because the mailbox can outlive the person.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p1-2"><span class="step-text"><span class="step-title">Turn on 2-Step Verification</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Not optional — Google requires it for Play Console access, and blocks sensitive actions without it.</span>
+            <span class="path"><b>Guide</b> <a href="https://support.google.com/accounts/answer/185839" target="_blank" rel="noopener">support.google.com — Turn on 2-Step Verification</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>Your developer account can push software to other people's phones. Google treats it as a high-value target and requires 2-Step Verification on accounts that can publish. You'll be confirming sign-ins fairly often, so make sure the second factor is a device you actually keep nearby.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p1-3"><span class="step-text"><span class="step-title">Decide: Personal or Organization</span></span></label>
+          <div class="step-body">
+            <span class="step-detail"><b>Personal</b> — fastest to register; identity verified with your ID. But: the 12-tester closed-test gate applies to every app, and if you monetize, your legal name and address are shown publicly.<br><b>Organization</b> — your company is the public developer, teammates get their own logins, and the 12-tester requirement <em>does not apply</em>. Requires a D-U-N-S Number and that you're authorized to act for the entity.</span>
+            <span class="path"><b>Compare</b> <a href="https://support.google.com/googleplay/android-developer/answer/13628312" target="_blank" rel="noopener">Required information for a Play Console developer account</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>Three things actually differ, and only the first is obvious.</p>
+              <p><b>1. What's public.</b> Personal accounts show your developer name on every listing — and once you sell anything, your legal name and physical address too. Organizations show the company's details instead.</p>
+              <p><b>2. The testing gate.</b> Personal accounts created after November 13, 2023 must pass the 12-testers-for-14-days closed test on <em>each app</em> before it can go to production. Organization accounts skip this entirely. If you have a registered business, this alone can save two weeks per app.</p>
+              <p><b>3. It's not a switch.</b> Moving from Personal to Organization means a new account and transferring each app across. If there's any real chance you'll want a company name on the store, start as an Organization even though it's slower to set up.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p1-4"><span class="step-text"><span class="step-title">If Organization: get a D-U-N-S Number</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Free. Check whether your entity already has one before applying — most registered companies do. Google requires it for organization registration.</span>
+            <span class="path"><b>Lookup / apply</b> <a href="https://www.dnb.com/duns.html" target="_blank" rel="noopener">dnb.com/duns</a> &nbsp;·&nbsp; <b>What Google needs</b> <a href="https://support.google.com/googleplay/android-developer/answer/13628312" target="_blank" rel="noopener">account requirements</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>A D-U-N-S Number is a nine-digit business identifier issued by Dun &amp; Bradstreet, a credit-reporting company. Google uses it as third-party proof that your company legally exists, rather than taking your word for it.</p>
+              <p>The catch that ruins timelines: the name and address you type into Google's registration must match the D&amp;B record <em>exactly</em>. A different street abbreviation or a missing &ldquo;LLC&rdquo; will stall the registration, and fixing a D&amp;B record is a separate process on their side. Look yours up first and copy the details verbatim.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p1-5"><span class="step-text"><span class="step-title">Register for Play Console — $25, once</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Pay the one-time fee, pick your public developer name, and fill in the contact details Google will use to verify you.</span>
+            <span class="path"><b>Register</b> <a href="https://play.google.com/console/signup" target="_blank" rel="noopener">play.google.com/console/signup</a> &nbsp;·&nbsp; <b>Help</b> <a href="https://support.google.com/googleplay/android-developer/answer/6112435" target="_blank" rel="noopener">Register for a developer account</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>One fee, unlimited apps, forever — there is no renewal. The developer name you pick here is what shows under your app on every listing, and while it <em>can</em> be edited later, it's identity: pick the name you want to be found by, not a throwaway.</p>
+              <p>Registration also asks for a contact email and phone number that Google verifies immediately — use ones you can check right then, not a mailbox you look at monthly.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p1-6"><span class="step-text"><span class="step-title">Complete identity verification</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Government ID for personal accounts; registration documents and D-U-N-S match for organizations. Usually clears in hours to a few days — watch the email on the account.</span>
+            <span class="path"><b>Where</b> Play Console → the verification banner / task on the home screen &nbsp;·&nbsp; <b>What's checked</b> <a href="https://support.google.com/googleplay/android-developer/answer/10788890" target="_blank" rel="noopener">Play Console requirements</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>Google verifies every developer's identity before they can publish — it's how the store attaches a real person or entity to every app. Until it clears, you can poke around the Console but the publish path is blocked, so there's no point starting Phase 06 early. The usual snag is a name/document mismatch: the ID has to match the account's legal name exactly, the same way the D-U-N-S record does for organizations.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p1-7"><span class="step-text"><span class="step-title">Confirm you can open the Console, and note what's public</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">A completed registration shows the Play Console home with a &ldquo;Create app&rdquo; button and no outstanding verification banners.</span>
+            <span class="path"><b>Check</b> <a href="https://play.google.com/console/" target="_blank" rel="noopener">play.google.com/console</a> — signed in with the developer account</span>
+            <details class="why"><summary>Why</summary>
+              <p>Worth pausing one minute on what the world will see: your developer name on every listing, your contact email, and — once you monetize on a personal account — your legal name and address. If any of that is a surprise, fix the account type now, in this phase, while nothing has shipped yet.</p>
+            </details>
+          </div>
+        </li>
+
+      </ul>
+
+      <div class="table-scroll">
+        <table class="fact-table wide">
+          <thead><tr><th>Account type</th><th>Fee</th><th>Gets you</th></tr></thead>
+          <tbody>
+            <tr><td>Personal developer account</td><td class="num">$25 once</td><td>Unlimited apps; 12-tester closed-test gate on each new app; your name (and, if monetizing, address) shown publicly</td></tr>
+            <tr><td>Organization developer account</td><td class="num">$25 once</td><td>Unlimited apps; no testing gate; company details shown publicly; teammates with their own logins — needs a D-U-N-S Number</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="phase" id="p2">
+    <div class="phase-head">
+      <div class="phase-no">02</div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Agreements, tax &amp; getting paid</div>
+        <div class="tags"><span class="tag once">One-time · revisit if your details change</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <p class="intro">This is the &ldquo;getting paid&rdquo; step. Shipping a free app with no purchases? <b>Skip this whole phase</b> — everything else in this manifest works without it. Just remember it exists, because the day you add a paid tier it becomes a multi-day blocker.</p>
+      <ul class="steps">
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p2-1"><span class="step-text"><span class="step-title">Create a Google payments profile</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">The profile that receives your payouts. It must be in the same legal name as the developer account — personal to personal, entity to entity.</span>
+            <span class="path"><b>Guide</b> <a href="https://support.google.com/googleplay/android-developer/answer/7161426" target="_blank" rel="noopener">Create a payments profile</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>Google verifies that the payments profile holder matches the registered developer. A personal profile under a slightly different name than your registered entity is the usual reason this bounces — and each bounce is a support round-trip measured in days.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p2-2"><span class="step-text"><span class="step-title">Link the payments profile in Play Console</span></span></label>
+          <div class="step-body">
+            <span class="path"><b>Go</b> Play Console → Settings (gear) → Payments profile → link or create</span>
+            <details class="why"><summary>Why</summary>
+              <p>This is the answer to the most-asked money question in this whole process: <em>&ldquo;why can't I set a price / create an in-app product?&rdquo;</em> The controls aren't disabled with an explanation — they just aren't available until a payments profile is linked. Linking it makes them appear.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p2-3"><span class="step-text"><span class="step-title">Add banking details and complete tax info</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Bank account for payouts, plus the tax forms for your situation — US persons file a W-9-equivalent flow; non-US developers answer treaty questions that directly change how much withholding comes off US sales.</span>
+            <span class="path"><b>Where</b> <a href="https://pay.google.com/" target="_blank" rel="noopener">pay.google.com</a> → your payments profile → Settings, and the tax-info prompts inside Play Console's payments pages</span>
+            <details class="why"><summary>Why</summary>
+              <p>Google is legally required to withhold tax from payouts unless the right form says otherwise. Get it wrong and you keep less money — a non-US developer who skips the treaty section can lose a large slice of US revenue to withholding a correctly-filled form would have reduced. If you're not sure which form applies, that's an accountant question, not a developer question.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p2-4"><span class="step-text"><span class="step-title">Enroll in the 15% service-fee tier</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Opt in so your first $1M of revenue each year is charged 15% instead of 30%. Auto-renewing subscriptions are 15% regardless.</span>
+            <span class="path"><b>Where</b> Play Console → Settings → Developer account → &ldquo;Service fee tier&rdquo; (wording shifts; it's under account settings) &nbsp;·&nbsp; <b>Background</b> <a href="https://support.google.com/googleplay/android-developer/answer/10632485" target="_blank" rel="noopener">service-fee changes</a> · <a href="https://support.google.com/googleplay/android-developer/answer/112622" target="_blank" rel="noopener">service fees</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>The 15% rate on your first million is not automatic — it's an enrollment, and un-enrolled developers pay the full 30% on every sale. It costs nothing and there is no downside. This is the single highest-value five minutes in the entire money section.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p2-5"><span class="step-text"><span class="step-title">Wait for verification to clear</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">A few business days. You can keep building and even run test tracks while it's pending — what you can't do is sell anything.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Banking and tax verification run on Google's clock, not yours. Check back rather than waiting for an email — the status change isn't always announced, and a &ldquo;pending&rdquo; payments profile the week of launch is exactly the trap this phase exists to prevent.</p>
+            </details>
+          </div>
+        </li>
+
+      </ul>
+      <div class="note"><b>Free app, no purchases, forever?</b> You genuinely never need this phase. But remember the PREP warning: a free app can never <em>become</em> paid on Play — the only later path to revenue is in-app purchases, which is when this phase comes due.</div>
+    </div>
+  </section>
+
+  <section class="phase" id="p3">
+    <div class="phase-head">
+      <div class="phase-no">03</div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Set up your computer</div>
+        <div class="tags"><span class="tag once">One-time · per machine</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <p class="intro">Android Studio is Google's app for building apps. You can technically build with nothing but Gradle and a JDK, but Studio bundles the SDK, the emulator, and the signing wizard — install it even if you plan to live in the terminal.</p>
+      <ul class="steps">
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p3-1"><span class="step-text"><span class="step-title">Install Android Studio</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">A multi-gigabyte download plus SDK components. Kick it off and do Phase 01 while it downloads.</span>
+            <span class="path"><b>Install</b> <a href="https://developer.android.com/studio" target="_blank" rel="noopener">developer.android.com/studio</a> — Windows, macOS, or Linux</span>
+            <details class="why"><summary>Why</summary>
+              <p>Studio ships everything as one install: the IDE, the Android SDK, a bundled JDK, and the emulator. Installing pieces separately is possible and is also how beginners end up with three JDKs and a build that works in one terminal and not another. One installer, one truth.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p3-2"><span class="step-text"><span class="step-title">Finish the first-run setup wizard</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">First launch downloads SDK platforms, build tools, and the emulator image. Let it finish before doing anything else.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Until this completes, command-line builds fail with confusing errors about missing SDK packages or unaccepted licenses — errors that read like a broken project rather than an unfinished install.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p3-3"><span class="step-text"><span class="step-title">Confirm command-line builds work</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">From the project's <span class="inline-code">android/</span> directory (once one exists), the Gradle wrapper should run and find the SDK. Accept any outstanding SDK licenses:</span>
+            <span class="path">cd android &amp;&amp; ./gradlew --version<br>~/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses &nbsp;<span style="opacity:.6"># macOS default path; %LOCALAPPDATA%\Android\Sdk on Windows</span></span>
+            <details class="why"><summary>Why</summary>
+              <p>Anything that builds your app without opening Studio's window — an agent, a build script, CI — goes through the Gradle wrapper. The two classic failures are a missing <span class="inline-code">ANDROID_HOME</span>/SDK location and unaccepted licenses, both of which fail with walls of text that boil down to one unrun command. Verifying now means Phase 05 is boring, which is what you want Phase 05 to be.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p3-4"><span class="step-text"><span class="step-title">Open the project the right way</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">In Studio, open the <span class="inline-code">android/</span> folder itself — not the repo root, and not a file inside it. Wait for the Gradle sync to finish before judging any red squiggles.</span>
+            <span class="path"><b>Typical path</b> File → Open → select the <span class="inline-code">android/</span> directory (Capacitor/RN/Flutter projects keep the native project there)</span>
+            <details class="why"><summary>Why</summary>
+              <p>Studio only understands Gradle projects. Open the repo root of a Capacitor or React Native app and you get a file browser with no build, no run button, and errors that look like a broken project. And the first Gradle sync downloads dependencies — judging errors before it finishes is judging a half-loaded page.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p3-5"><span class="step-text"><span class="step-title">Recommended: set up one real Android phone</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Enable Developer options (tap Build number seven times in Settings → About phone), turn on USB debugging, plug it in, and confirm <span class="inline-code">adb devices</span> lists it.</span>
+            <details class="why"><summary>Why</summary>
+              <p>The emulator covers most testing, but notifications, cameras, performance, and the actual install-from-Play flow behave differently on hardware. You'll also want a real device to walk through the tester opt-in flow yourself in Phase 06 before asking twelve other people to do it — debugging their confusion secondhand is far slower than hitting it firsthand.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p3-6"><span class="step-text"><span class="step-title">Optional: install the Play Console app on your phone</span></span></label>
+          <div class="step-body">
+            <span class="path"><b>Android</b> <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.playconsole" target="_blank" rel="noopener">Google Play Console app</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>Release status changes, review verdicts, and new user reviews arrive as push notifications instead of you refreshing a browser tab. It can also halt a staged rollout from anywhere — genuinely useful the week something goes wrong.</p>
+            </details>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </section>
+
+  <section class="phase" id="p4">
+    <div class="phase-head">
+      <div class="phase-no">04</div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Register the app &amp; its identity</div>
+        <div class="tags"><span class="tag app">Per app</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <p class="intro">Everything here is scoped to one app, and two of these decisions are effectively permanent — the package name and the free/paid choice. You'll repeat this whole phase, quickly and with less agonising, for every new project.</p>
+      <ul class="steps">
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p4-1"><span class="step-text"><span class="step-title">Choose a package name — this one is permanent</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Reverse-DNS format: <span class="inline-code">com.yourname.appname</span>. Lowercase letters, numbers and dots; each segment starts with a letter. Must be unique across every app Google has ever seen — and <span class="inline-code">com.example.*</span> is refused outright.</span>
+            <details class="why"><summary>Why</summary>
+              <p>The package name (<span class="inline-code">applicationId</span> in Gradle) is your app's true name as far as Android is concerned. It's how Play knows an update is an update rather than a new app, how purchases attach to your product, and how the OS decides which stored data belongs to you.</p>
+              <p><b>You cannot change it after your first upload.</b> Changing it means a brand-new app record and a brand-new Play listing — zero reviews, zero installs, and existing users never get another update. Treat it like naming a child, not naming a variable.</p>
+              <p>Practical picks: own a domain? Reverse it — <span class="inline-code">com.slapstax.slapstax</span>. Don't? <span class="inline-code">com.yourfullname.appname</span> is perfectly acceptable and nobody will ever comment on it. Avoid anything containing &ldquo;test&rdquo;, &ldquo;demo&rdquo;, or a version number.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p4-2"><span class="step-text"><span class="step-title">Create the app in Play Console — and make the free/paid call</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">App name, default language, app or game, free or paid. The free/paid toggle is the permanent one: <b>free can never become paid.</b></span>
+            <span class="path"><b>Go</b> <a href="https://play.google.com/console/" target="_blank" rel="noopener">Play Console</a> → All apps → <b>Create app</b> &nbsp;·&nbsp; <b>Guide</b> <a href="https://support.google.com/googleplay/android-developer/answer/9859152" target="_blank" rel="noopener">Create and set up your app</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>This creates the app <em>record</em> — the container the listing, releases, and declarations all hang off. Nothing goes public yet; creating the record early is free and lets you fill in Phases 07–08 while the code is still cooking.</p>
+              <p>The free/paid choice is asked casually here and is the least reversible thing on the page. If there's any chance you'll charge for the app itself (rather than via in-app purchases), pick paid now — you can always lower a price to zero later per country, but a free app is locked free forever.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p4-3"><span class="step-text"><span class="step-title">Set the <span class="inline-code">applicationId</span> in the project</span></span></label>
+          <div class="step-body">
+            <span class="path"><b>Where</b> <span class="inline-code">android/app/build.gradle</span> → <span class="inline-code">defaultConfig</span> → <span class="inline-code">applicationId</span> — and keep any framework config that mirrors it (<span class="inline-code">capacitor.config.json</span>'s <span class="inline-code">appId</span>, <span class="inline-code">app.json</span>) agreeing</span>
+            <details class="why"><summary>Why</summary>
+              <p>Play matches uploads to the app record by this exact string. A typo here doesn't error locally — it builds fine and then uploads as a different, unknown app. Set it once, grep for the old value to catch every mirror, and never touch it again.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p4-4"><span class="step-text"><span class="step-title">Generate your upload keystore — then back it up like it's money</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">One command, two passwords you choose, one file that must never be committed to git and never exist in only one place:</span>
+            <span class="path">keytool -genkeypair -v -keystore upload-keystore.jks -alias upload -keyalg RSA -keysize 2048 -validity 10000</span>
+            <details class="why"><summary>Why</summary>
+              <p>The keystore holds the private key that signs every build you upload. It's a secret in both directions: anyone who has it can push builds toward your users, and committing it to a public repo is a real, recurring incident pattern — which is why it lives outside git, with its passwords in a password manager and the file itself backed up somewhere that survives a dead laptop.</p>
+              <p>The softener: with Play App Signing (next steps), this is only your <em>upload</em> key, and a lost one can be reset through Play Console support. That turns &ldquo;lost keystore&rdquo; from the app-ending catastrophe it was historically into a support ticket — but a leaked one is still a leaked signing key. Guard it accordingly.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p4-5"><span class="step-text"><span class="step-title">Wire the signing config into Gradle</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">A <span class="inline-code">key.properties</span> file (untracked) holding the paths and passwords, read by a <span class="inline-code">signingConfigs</span> block in <span class="inline-code">build.gradle</span> — or use Android Studio's wizard per-build instead: <b>Build → Generate Signed App Bundle</b>.</span>
+            <span class="path"><b>Reference</b> <a href="https://developer.android.com/studio/publish/app-signing" target="_blank" rel="noopener">developer.android.com — sign your app</a> &nbsp;·&nbsp; add <span class="inline-code">key.properties</span>, <span class="inline-code">*.jks</span> to <span class="inline-code">.gitignore</span></span>
+            <details class="why"><summary>Why</summary>
+              <p>The Gradle wiring is what lets <span class="inline-code">./gradlew bundleRelease</span> produce a signed bundle unattended — which is what an agent, a script, or future-you at midnight actually runs. The Studio wizard works too and asks for the passwords each time; the properties-file route trades a one-time setup for never typing them again. Either way the passwords stay out of the repo.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p4-6"><span class="step-text"><span class="step-title">Understand Play App Signing — two keys, and Google holds one</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Enrollment happens automatically with your first upload: Google generates and holds the <b>app signing key</b> (what devices actually verify), and your keystore from step 4 becomes the <b>upload key</b> (what proves an upload came from you).</span>
+            <span class="path"><b>Read</b> <a href="https://support.google.com/googleplay/android-developer/answer/9842756" target="_blank" rel="noopener">Use Play App Signing</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>Every &ldquo;signed with the wrong key&rdquo; error for the rest of this app's life is this two-key system talking. The mental model: your upload key gets a bundle <em>to Google</em>; Google's app signing key gets it <em>to devices</em>. You never handle the app signing key, it can't be lost by you, and the upload key is resettable via support. Nothing to do in this step but read — five minutes here decodes an entire genre of future error message.</p>
+            </details>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </section>
+
+  <section class="phase" id="p5">
+    <div class="phase-head">
+      <div class="phase-no">05</div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Build the release artifact</div>
+        <div class="tags"><span class="tag release">Every release</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <p class="intro">The loop you'll run for every version, forever: bump, build, upload. Play accepts one format for new apps — the Android App Bundle (<span class="inline-code">.aab</span>) — and the whole phase exists to produce one signed correctly.</p>
+      <ul class="steps">
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p5-1"><span class="step-text"><span class="step-title">Rebuild the app's own assets first, if it's a web-shell app</span></span></label>
+          <div class="step-body">
+            <span class="path">npm run build &amp;&amp; npx cap sync android &nbsp;<span style="opacity:.6"># Capacitor example — your stack's equivalent</span></span>
+            <details class="why"><summary>Why</summary>
+              <p>The native build packages whatever web build is sitting in the sync directory — it does not rebuild your web app for you. Skipping this ships last week's interface inside this week's release, and nothing errors: it's the single most common &ldquo;my update didn't change anything&rdquo; on hybrid stacks.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p5-2"><span class="step-text"><span class="step-title">Bump <span class="inline-code">versionCode</span> and <span class="inline-code">versionName</span></span></span></label>
+          <div class="step-body">
+            <span class="step-detail"><span class="inline-code">versionCode</span> is an integer that must be strictly higher than every upload before it — even failed ones. <span class="inline-code">versionName</span> is the human-readable version users see.</span>
+            <span class="path"><b>Where</b> <span class="inline-code">android/app/build.gradle</span> → <span class="inline-code">defaultConfig</span> &nbsp;·&nbsp; <b>Reference</b> <a href="https://developer.android.com/studio/publish/versioning" target="_blank" rel="noopener">version your app</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>Play tracks builds by <span class="inline-code">versionCode</span> alone and refuses any upload that reuses one — &ldquo;Version code 2 has already been used&rdquo; is the toll for forgetting. A boring habit that prevents it entirely: bump the number as the <em>first</em> edit of any release day, not the last.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p5-3"><span class="step-text"><span class="step-title">Build the signed bundle</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Either route produces the same artifact:</span>
+            <span class="path"><b>Studio</b> Build → Generate Signed App Bundle / APK… → <b>Android App Bundle</b> → pick your keystore → release<br><b>Terminal</b> cd android &amp;&amp; ./gradlew bundleRelease</span>
+            <details class="why"><summary>Why</summary>
+              <p>The AAB is not an installable app — it's a publishing format. You upload the bundle, and Play generates optimized APKs per device from it (right screen densities, right architectures), which is why it's required: it's what makes installs small. If Gradle finishes but the bundle is unsigned, the signing config from Phase 04 isn't being read — fix that rather than signing by hand.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p5-4"><span class="step-text"><span class="step-title">Find the output and sanity-check it</span></span></label>
+          <div class="step-body">
+            <span class="path"><b>Path</b> <span class="inline-code">android/app/build/outputs/bundle/release/app-release.aab</span> — confirm the file is fresh (check the timestamp) and not tiny</span>
+            <details class="why"><summary>Why</summary>
+              <p>Gradle happily leaves old artifacts sitting in <span class="inline-code">outputs/</span>. Uploading a stale bundle from a previous build is silent — same filename, wrong contents — and the timestamp check is the two-second habit that catches it.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p5-5"><span class="step-text"><span class="step-title">Smoke-test the release build before uploading</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Install the release build on a device or emulator and open every main screen once. <a href="https://developer.android.com/tools/bundletool" target="_blank" rel="noopener">bundletool</a> can install straight from the <span class="inline-code">.aab</span>; or build <span class="inline-code">assembleRelease</span> and <span class="inline-code">adb install</span> the APK.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Release builds differ from debug builds in ways that only show at runtime — minification can strip something reflection needed, a debug-only flag can gate real content, a misconfigured base URL can point at localhost. Thirty seconds of tapping through the release build catches the class of bug that otherwise becomes a one-star review titled &ldquo;blank screen&rdquo;.</p>
+            </details>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </section>
+
+  <section class="phase" id="p6">
+    <div class="phase-head">
+      <div class="phase-no">06</div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Test before you release</div>
+        <div class="tags"><span class="tag release">Every release · strongly recommended</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <p class="intro">Play has three testing tracks before production: <b>internal</b> (instant, up to 100 people), <b>closed</b> (invited lists), and <b>open</b> (anyone with the link). For a personal account created after Nov 13, 2023, the closed track isn't optional — it's the mandatory 14-day gate in front of production. Start this phase the moment you have any build at all.</p>
+      <ul class="steps">
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p6-1"><span class="step-text"><span class="step-title">Upload your first build to Internal testing</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Fastest loop: available to your listed testers within minutes, no review. Use it for your own devices and your first honest look at the app installed from Play.</span>
+            <span class="path"><b>Go</b> Play Console → your app → Testing → <b>Internal testing</b> → Create new release → upload the <span class="inline-code">.aab</span> &nbsp;·&nbsp; <b>Guide</b> <a href="https://support.google.com/googleplay/android-developer/answer/9845334" target="_blank" rel="noopener">Set up an open, closed, or internal test</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>Internal testing is where upload problems surface cheaply — signing errors, version-code collisions, a broken first-run — while the audience is just you. It also triggers your first pre-launch report (step 6) for free. Everything downstream goes smoother when the first upload's mistakes happened here.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p6-2"><span class="step-text"><span class="step-title">Create a Closed testing track</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">The track whose test satisfies the production-access requirement. Promote the internal build to it, or upload fresh.</span>
+            <span class="path"><b>Go</b> Play Console → your app → Testing → <b>Closed testing</b> → create/manage track → Create new release</span>
+            <details class="why"><summary>Why</summary>
+              <p>Only <em>closed</em> testing counts toward the 12-tester requirement — internal and open testing don't. If the gate applies to your account, this track is the one whose clock matters, so create it early and treat it as the app's real home until production opens.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p6-3"><span class="step-text"><span class="step-title">Add testers and send the opt-in link</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Add tester emails (or a Google Group) to the track, then copy the opt-in URL from the track's Testers tab. Each tester must open that link, accept, <em>and install the app</em> — being on the list alone counts for nothing.</span>
+            <span class="path"><b>Where</b> Closed testing track → Testers tab → email lists + &ldquo;Copy link&rdquo; under How testers join your test</span>
+            <details class="why"><summary>Why</summary>
+              <p>The #1 confusion in all of Play testing: adding someone's email does <em>not</em> make them a tester. The email list is an allow-list; the opt-in link is the actual door. Send the link with two sentences of instructions (&ldquo;open on your Android phone, tap Accept, then Install&rdquo;), and expect to re-send it — a third of any tester group loses the first message.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p6-4"><span class="step-text"><span class="step-title">Personal accounts: hold 12+ opted-in testers for 14 straight days</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">The requirement is 12 testers opted in <em>continuously</em> for the 14 days before you apply — recruit 15–18 so dropouts don't reset your clock. Friends, family, coworkers all count; they just need Android phones and Google accounts.</span>
+            <span class="path"><b>The rule</b> <a href="https://support.google.com/googleplay/android-developer/answer/14151465" target="_blank" rel="noopener">App testing requirements for new personal accounts</a> &nbsp;·&nbsp; <b>Google's own guide</b> <a href="https://support.google.com/googleplay/android-developer/community-guide/255621488" target="_blank" rel="noopener">Everything about the 12-testers requirement</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>This is the two-week clock from PREP, now live. &ldquo;Continuously&rdquo; is the sharp edge: a tester who opts out on day 10 can drop you below 12 and stall the count, which is why you recruit a buffer. Keep testers mildly engaged — a couple of updates during the window is fine and looks like real testing, because it is. Google also asks about your test when you apply for production access, so genuine usage now writes those answers for you.</p>
+              <p>Organization account? This step doesn't apply — tick it and move on.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p6-5"><span class="step-text"><span class="step-title">Actually use the test — collect crashes and feedback, then iterate</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Watch the track's crash reports and pre-launch results, ask testers what confused them, ship fixes to the same track. Each upload needs a bumped <span class="inline-code">versionCode</span> (Phase 05 loop).</span>
+            <details class="why"><summary>Why</summary>
+              <p>Twelve real users on real devices will surface what the emulator never did: a keyboard covering an input, a notification that never fired, a screen unreadable in dark mode. The 14 days are mandatory anyway — spending them fixing real feedback converts a compliance wait into an actually better launch build.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p6-6"><span class="step-text"><span class="step-title">Read the pre-launch report</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Automatic on track uploads: Google's robo-crawler opens the app on a fleet of real devices and reports crashes, layout issues, accessibility flags, and security warnings.</span>
+            <span class="path"><b>Go</b> Play Console → your app → Test and release → <b>Pre-launch report</b> &nbsp;·&nbsp; <b>About</b> <a href="https://support.google.com/googleplay/android-developer/answer/6334373" target="_blank" rel="noopener">pre-launch reports</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>It's a free device farm. A crash that appears on three cheap devices in the report is a crash a real user hits on launch day — and the same automated checks inform review, so a clean report is also cheap insurance against a &ldquo;broken app&rdquo; rejection you'd otherwise discover a week later.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p6-7"><span class="step-text"><span class="step-title">Personal accounts: apply for production access</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">When the 14 days complete, the Console's dashboard offers the application — short questions about your test, your testers, and readiness. Answer from what actually happened; approval typically takes a few days.</span>
+            <span class="path"><b>Where</b> Play Console → your app → Dashboard → the &ldquo;Apply for production&rdquo; task appears when the requirement is met</span>
+            <details class="why"><summary>Why</summary>
+              <p>A human-reviewed application, not a rubber stamp — vague or copy-pasted answers get rejected and cost you another cycle. Concrete beats polished: what your testers did, what you fixed because of them, why the app is ready. Once granted, production access is permanent for this app and Phase 10's rollout unlocks.</p>
+            </details>
+          </div>
+        </li>
+
+      </ul>
+      <div class="note"><b>Open testing</b> (anyone with the link, optional cap) exists too — useful later for a public beta with thousands of users, and it can run alongside production forever. It doesn't count toward the 12-tester requirement, so it's an afterthought on a first launch, not a step.</div>
+    </div>
+  </section>
+
+  <section class="phase" id="p7">
+    <div class="phase-head">
+      <div class="phase-no">07</div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Store listing content</div>
+        <div class="tags"><span class="tag app">Per app</span><span class="tag release">Updated per release</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <p class="intro">Everything the public sees, all on one Console page. Play has no separate keyword field — the name and descriptions <em>are</em> your search presence, which makes this copy do double duty. Listing edits don't require a new build, but they do go through review.</p>
+      <ul class="steps">
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p7-1"><span class="step-text"><span class="step-title">App name — 30 characters</span></span></label>
+          <div class="step-body">
+            <span class="path"><b>Go</b> Play Console → your app → Grow → Store presence → <b>Main store listing</b></span>
+            <details class="why"><summary>Why</summary>
+              <p>Shown everywhere the app appears. Stuffing it with keywords (&ldquo;Sleep Tracker - Alarm, Sounds, Calm&rdquo;) is an explicit metadata-policy violation on Play, not a growth hack — the name should be the name, and the descriptions carry the search terms.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p7-2"><span class="step-text"><span class="step-title">Short description — 80 characters</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">The one line under your name in search results and at the top of the listing. Say what the app does, plainly — it's the highest-leverage sentence you'll write.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Most people who see your listing read exactly this much before deciding. It's also indexed for search. A vague tagline (&ldquo;Your journey starts here&rdquo;) spends both jobs on nothing; &ldquo;Daily scripture with guided study, journal, and audio&rdquo; spends them on installs.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p7-3"><span class="step-text"><span class="step-title">Full description — up to 4000 characters</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Lead with what the app does in one sentence, then short scannable sections. Paste from the drafted <span class="inline-code">store-assets/play-listing.md</span> rather than composing in the form.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Indexed for search and read by the minority who tap &ldquo;read more&rdquo; — so the first two lines matter most, and natural mentions of the terms people would search for do real work. Repeating a keyword unnaturally is the same metadata violation as stuffing the title; write for humans and the index follows.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p7-4"><span class="step-text"><span class="step-title">Upload the 512×512 app icon</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">32-bit PNG, up to 1MB. This is the store-listing icon — separate from the launcher icons inside the app, and it should match them.</span>
+            <span class="path"><b>Specs</b> <a href="https://support.google.com/googleplay/android-developer/answer/9866151" target="_blank" rel="noopener">preview assets — specifications</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>Google masks the corners itself, so upload the full square. A listing icon that doesn't match the installed launcher icon reads as sloppy at best and impersonation at worst — same art, both places.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p7-5"><span class="step-text"><span class="step-title">Upload the feature graphic — 1024×500, required</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">The wide banner from Phase 00 (or make one now): app mark + name on a brand background, JPEG or 24-bit PNG.</span>
+            <details class="why"><summary>Why</summary>
+              <p>The form blocks publishing without it, which is how most people discover it exists. It tops your listing, backs any promo video, and is what editorial placements use — the one asset with no iOS equivalent and therefore the one nobody has ready.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p7-6"><span class="step-text"><span class="step-title">Upload phone screenshots — at least 2, up to 8</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">JPEG or 24-bit PNG (no alpha), each side 320–3840px, portrait 9:16 for the phone slot. First two or three are what most people actually see — order them as a story.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Screenshots are the listing's real sales pitch. Play's looser size rules make automation easy (Phase 00 shoots them headlessly), and re-shooting the set when the UI changes should cost seconds, not an evening of hand-cropping. The alpha-channel refusal is silent — flatten PNGs before upload.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p7-7"><span class="step-text"><span class="step-title">Tablet screenshots — only if you want tablet users</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Separate 7-inch and 10-inch sets qualify the listing as tablet-optimized. Skip freely if phones are the audience.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Without them, tablet users see your phone shots and Play may rank the app lower in tablet search. With them, you're promising the layout actually works on tablets — upload them only if that's true, because the mismatch generates the reviews.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p7-8"><span class="step-text"><span class="step-title">Category, tags, and contact details</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Pick the category that matches what the app <em>does</em>; add the contact email (required, shown publicly), and website/phone if you have them.</span>
+            <span class="path"><b>Go</b> Play Console → your app → Grow → Store presence → <b>Store settings</b></span>
+            <details class="why"><summary>Why</summary>
+              <p>Category drives which charts and browse shelves you can appear on — miscategorizing into a &ldquo;less crowded&rdquo; one is a metadata violation, not a strategy. The contact email is where users and Google both reach you; a monitored address here prevents the &ldquo;developer unreachable&rdquo; class of problem.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p7-9"><span class="step-text"><span class="step-title">Host the privacy policy and have the URL ready</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Put the drafted <span class="inline-code">privacy-policy.html</span> somewhere public and stable — GitHub Pages off the app's repo is the fastest zero-cost host. The URL itself is entered in Phase 08.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Required for every app, offline ones included, and the policy must also be reachable from inside the app. A dead link, a &ldquo;coming soon&rdquo; page, or a policy describing a different product is a rejection — and Google re-checks it after launch, so the URL needs to stay alive, not just survive review day.</p>
+            </details>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </section>
+
+  <section class="phase" id="p8">
+    <div class="phase-head">
+      <div class="phase-no">08</div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Privacy &amp; compliance</div>
+        <div class="tags"><span class="tag app">Per app</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <p class="intro">Play Console gathers every declaration on one page — <b>App content</b> — and won't release anything while an item sits incomplete. Google asks a lot up front; every answer here is checked against what the app actually does, some of them <em>after</em> launch.</p>
+      <ul class="steps">
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p8-1"><span class="step-text"><span class="step-title">Open the App content page — your compliance dashboard</span></span></label>
+          <div class="step-body">
+            <span class="path"><b>Go</b> Play Console → your app → Monitor and improve → Policy → <b>App content</b> (the Console surfaces it as tasks on the Dashboard too)</span>
+            <details class="why"><summary>Why</summary>
+              <p>Every declaration below lives here, each with its own Start/Manage button and status. The page is the honest to-do list — when a release won't roll out and nothing says why, an incomplete item on this page is the answer more often than anything else in the Console.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p8-2"><span class="step-text"><span class="step-title">Enter the privacy policy URL</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">The URL hosted in Phase 07, step 9. Must load, must describe <em>this</em> app, must match the Data safety answers.</span>
+            <details class="why"><summary>Why</summary>
+              <p>This link renders on your public listing, and reviewers open it. It's also cross-checked against the Data safety form — a policy that says &ldquo;we collect nothing&rdquo; against a form that declares analytics is a contradiction with your name on it.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p8-3"><span class="step-text"><span class="step-title">Ads declaration</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Does the app show ads? One toggle — and it must agree with the content rating answers, the Data safety form, and reality.</span>
+            <span class="path"><b>About</b> <a href="https://support.google.com/googleplay/android-developer/answer/9857753" target="_blank" rel="noopener">ads declaration</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>&ldquo;Contains ads&rdquo; shows as a label on your listing. Declaring no while an ad SDK sits in the dependency tree is detectable — Google scans the binary — and is a straightforward policy strike. If a library bundles ad code you don't use, that's exactly the kind of finding <span class="inline-code">docs/STORE-FACTS.md</span> exists to surface before this toggle does.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p8-4"><span class="step-text"><span class="step-title">Content rating questionnaire (IARC)</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Honest questions about violence, sexuality, gambling, language, user-generated content. One pass generates official ratings for every region at once.</span>
+            <span class="path"><b>Requirements</b> <a href="https://support.google.com/googleplay/android-developer/answer/188189" target="_blank" rel="noopener">content rating requirements</a> &nbsp;·&nbsp; <b>The system</b> <a href="https://www.globalratings.com/" target="_blank" rel="noopener">IARC</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>Unrated apps get removed, and deliberately under-rating to dodge an age band is enforced against the account, not just the app. Over-rating costs too — it walls off audiences and stores. Answer straight; the questionnaire takes ten minutes and only hurts when gamed.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p8-5"><span class="step-text"><span class="step-title">Target audience and content</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Declare the age groups the app is for. Include anyone under 13 and the <a href="https://support.google.com/googleplay/android-developer/answer/9893335" target="_blank" rel="noopener">Families policies</a> apply — stricter ads, data, and content rules.</span>
+            <span class="path"><b>Guide</b> <a href="https://support.google.com/googleplay/android-developer/answer/9867159" target="_blank" rel="noopener">target audience and content settings</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>This is a legal declaration (children's-privacy law territory), not a marketing choice. The trap runs both directions: declaring &ldquo;including children&rdquo; without meeting Families requirements gets rejected, while an app that clearly appeals to kids but declares adults-only gets flagged for the mismatch. Most general-audience apps correctly declare 13+ or 18+ and move on.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p8-6"><span class="step-text"><span class="step-title">Data safety form — the big one</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Data type by data type: collected? shared? encrypted in transit? deletable? Fill it from <span class="inline-code">docs/STORE-FACTS.md</span> — the grepped facts — not from what the app is &ldquo;supposed to&rdquo; do. Local-only storage is not &ldquo;collected&rdquo; in Play's definition.</span>
+            <span class="path"><b>Guide</b> <a href="https://support.google.com/googleplay/android-developer/answer/10787469" target="_blank" rel="noopener">Data safety section — how to complete it</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>The answers render as the privacy label on your listing, and Google verifies them against the app's observed behavior — including every SDK you link, whose collection is <em>your</em> declaration to make. A form that under-declares is a policy violation that can remove the app <b>after</b> launch, which is a worse day than a rejection. The offline-app fast path is real: no data leaves the device → a short form, honestly answered, done in minutes.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p8-7"><span class="step-text"><span class="step-title">If the app has accounts: deletion in-app <em>and</em> by web link</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Two required paths: a discoverable in-app way to delete the account, and a web URL (entered in the Data safety form) where users can request deletion without reinstalling.</span>
+            <span class="path"><b>The rule</b> <a href="https://support.google.com/googleplay/android-developer/answer/13327111" target="_blank" rel="noopener">account deletion requirements</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>Stricter than Apple's version: the web link is mandatory precisely because people delete apps before accounts. The link shows publicly on your listing's Data safety section. No accounts in the app? Answer &ldquo;no account creation&rdquo; in the form and this whole item collapses to one radio button.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p8-8"><span class="step-text"><span class="step-title">App access — credentials for review</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">If any part of the app sits behind a login or paywall, provide working test credentials and steps. Fully open app? Declare exactly that.</span>
+            <span class="path"><b>Where</b> App content → <b>App access</b> &nbsp;·&nbsp; <b>Guide</b> <a href="https://support.google.com/googleplay/android-developer/answer/9859455" target="_blank" rel="noopener">prepare your app for review</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>Reviewers who can't get past a login review what they can see: a login wall. Credentials that are real, current, and re-verified before every submission are the cheapest rejection insurance that exists — an expired test password is the classic self-inflicted delay.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p8-9"><span class="step-text"><span class="step-title">Answer the remaining declarations — news, health, financial, government</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">A run of mostly-&ldquo;no&rdquo; questions for a typical app: is this a news app, does it target government audiences, does it provide financial or health features. Two minutes if none apply; real forms if one does.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Each is a regulated category with its own verification (news publishers prove identity, financial apps document licensing, health apps face data rules). The catch for everyone else is scope creep by accident — a devotional app with a &ldquo;wellness&rdquo; blurb isn't a health app, and answering as if it were buys verification work nothing required. Answer for what the app <em>does</em>, not what its marketing gestures at.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p8-10"><span class="step-text"><span class="step-title">EU: declare and verify trader status (DSA)</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">To distribute in the EU you declare whether you're a &ldquo;trader&rdquo; (earning from apps professionally) and verify contact details, which are then shown publicly on EU listings.</span>
+            <span class="path"><b>Where</b> Play Console → Settings → Developer account → the DSA / trader-status section &nbsp;·&nbsp; <b>Background</b> <a href="https://support.google.com/googleplay/android-developer/answer/14659200" target="_blank" rel="noopener">conditions for Google Play in the EEA</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>EU consumer law, not Google preference: apps from undeclared developers stop being distributable in the EU, and monetizing as a declared trader means a verified address and contact shown to EU users. If that's unacceptable as an individual, the honest alternatives are a business entity or excluding EU countries in Phase 09 — silence just removes the app there for you.</p>
+            </details>
+          </div>
+        </li>
+
+      </ul>
+      <div class="note"><b>The through-line:</b> the Data safety form, the privacy policy, the account-deletion answer, and the actual binary must all tell the same story. That's why Phase 00 greps the code and writes <span class="inline-code">docs/STORE-FACTS.md</span> first — every answer on this page comes from one file, so they can't drift apart.</div>
+    </div>
+  </section>
+
+  <section class="phase" id="p9">
+    <div class="phase-head">
+      <div class="phase-no">09</div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Pricing &amp; availability</div>
+        <div class="tags"><span class="tag app">Per app</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <p class="intro">Where the app is available and what it costs. Everything here is freely editable later — except the one switch you already know about.</p>
+      <ul class="steps">
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p9-1"><span class="step-text"><span class="step-title">Confirm free or paid — the last exit</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Set in Phase 04 when the app record was created; this is the final check before anything publishes. Free is permanent. Paid can drop to any lower price, including effectively free per-country sales, but a <em>free app can never charge for itself.</em></span>
+            <details class="why"><summary>Why</summary>
+              <p>Worth its own box because this page is the last place the decision is cheap. After first publish, the only revenue paths for a free app are in-app purchases and subscriptions (Phase 12) — fine for most modern apps, fatal if your plan was a $4.99 up-front price you forgot to set.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p9-2"><span class="step-text"><span class="step-title">Choose countries</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Per-track country lists. Defaulting to &ldquo;all countries&rdquo; is fine for a free app with no legal exposure; EU availability requires the Phase 08 trader declaration.</span>
+            <span class="path"><b>Go</b> Play Console → your app → Release → Production → <b>Countries / regions</b></span>
+            <details class="why"><summary>Why</summary>
+              <p>Broad-by-default is the Play norm (the opposite of the cautious-iOS instinct) because there's no per-country listing work unless you localize. The reasons to exclude a country are real ones: legal/regulatory exposure, content laws, or the EU declaration you've decided not to make. You can add or remove countries any time; removals don't uninstall the app for existing users.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p9-3"><span class="step-text"><span class="step-title">If paid: set the price</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Set a base price; Google converts per country with sensible local price points, all overridable. Requires the Phase 02 payments profile.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Local price points matter more than the exchange rate — markets have strong customary tiers, and the auto-suggested points land on them. Override only with a reason. Price changes are free and instant forever; it's only the free/paid identity that's locked.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p9-4"><span class="step-text"><span class="step-title">If charging anything: confirm the 15% tier enrollment</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">The Phase 02 enrollment is account-level — thirty seconds to verify it's active before revenue starts flowing at the wrong rate.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Un-enrolled means 30% off the top of every sale that should have been 15%. There's no retroactive refund for fees paid before enrollment — the check costs nothing, the miss costs double.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p9-5"><span class="step-text"><span class="step-title">Pre-registration (optional)</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Opens the listing before launch so users can sign up for an install-on-release notification. Skip for a first app unless there's a real audience waiting.</span>
+            <details class="why"><summary>Why</summary>
+              <p>It's a marketing tool with a deadline attached — pre-registration commits you to launching within a window. With an existing audience it converts hype into day-one installs; without one it's a countdown clock ticking at nobody. YAGNI for launch number one.</p>
+            </details>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </section>
+
+  <section class="phase" id="p10">
+    <div class="phase-head">
+      <div class="phase-no">10</div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Submit for review</div>
+        <div class="tags"><span class="tag release">Every release</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <p class="intro">On Play, &ldquo;submitting&rdquo; is rolling out a production release — review happens on the way. Personal accounts need Phase 06's production access granted first; everyone needs Phase 08 complete, because incomplete declarations hard-block the rollout button.</p>
+      <ul class="steps">
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p10-1"><span class="step-text"><span class="step-title">Clear every error and task on the Dashboard first</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">The Console's Dashboard and Publishing overview list exactly what's missing — declarations, listing assets, country selection. Work the list to zero before creating the release.</span>
+            <span class="path"><b>Go</b> Play Console → your app → <b>Dashboard</b> — expand the remaining setup tasks</span>
+            <details class="why"><summary>Why</summary>
+              <p>Unlike Apple's submit-then-discover flow, Play tells you up front — but only on this page. The classic frustration is hunting a greyed-out &ldquo;rollout&rdquo; button's reason in release settings when the answer was a red item on the Dashboard the whole time.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p10-2"><span class="step-text"><span class="step-title">Decide: managed publishing on or off</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Off (default): the release goes live automatically the moment review approves it. On: approved changes wait until you press publish.</span>
+            <span class="path"><b>Where</b> Play Console → your app → Publishing overview → <b>Managed publishing</b> &nbsp;·&nbsp; <b>Guide</b> <a href="https://support.google.com/googleplay/android-developer/answer/9859654" target="_blank" rel="noopener">control when changes are published</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>Review finishing at 3am and your app launching while you sleep is the default behavior. Managed publishing decouples &ldquo;approved&rdquo; from &ldquo;live&rdquo; — the tool for coordinating with an announcement, a website, or an iOS release going out the same day. The trade: with it on, <em>nothing</em> publishes until you press the button, including the fix you forgot was queued behind it.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p10-3"><span class="step-text"><span class="step-title">Create the production release and roll out</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Promote the tested build from its track (or upload the <span class="inline-code">.aab</span> fresh), write the release notes, review the summary, and confirm rollout.</span>
+            <span class="path"><b>Go</b> Play Console → your app → Release → <b>Production</b> → Create new release → promote from Closed testing &nbsp;·&nbsp; <b>Guide</b> <a href="https://support.google.com/googleplay/android-developer/answer/9859348" target="_blank" rel="noopener">prepare and roll out a release</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>Promoting the exact build your testers ran is the point of the tracks system — same file, same behavior, no &ldquo;works in beta, broken in prod&rdquo; surprise from a hasty rebuild. The release notes field (500 characters) shows on the listing; &ldquo;bug fixes and improvements&rdquo; is a wasted line on launch day.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p10-4"><span class="step-text"><span class="step-title">Wait out review — hours to about seven days</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">First apps from new accounts sit at the long end; updates from established accounts often clear in hours. The status lives on the Publishing overview, and verdicts arrive by email and Console inbox.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Review time is not a signal — a long wait doesn't mean trouble, and nothing you resubmit makes it faster (resubmitting restarts the clock). Plan launches with a week of slack and the wait is boring instead of terrifying. <a href="https://support.google.com/googleplay/android-developer/answer/9859751" target="_blank" rel="noopener">Publish your app</a> covers what each status means.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p10-5"><span class="step-text"><span class="step-title">If rejected: read the actual reason before touching anything</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">The rejection email and the Console's Policy status page name the specific policy and, usually, the specific screen or declaration. Fix that; don't shotgun changes.</span>
+            <span class="path"><b>Go</b> Play Console → your app → Monitor and improve → Policy → <b>Policy status</b></span>
+            <details class="why"><summary>Why</summary>
+              <p>Most rejections are narrow: a Data safety mismatch, a broken privacy-policy link, a screenshot showing content the app doesn't have. The named policy is the whole assignment — fix precisely that, resubmit, done. Blind-fixing five other things adds new surface area to review and turns one cycle into three. Genuinely wrong verdict? There's an appeal path from the same page; polite and specific beats outraged.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p10-6"><span class="step-text"><span class="step-title">Approved — confirm it's actually live</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">With managed publishing on, press the publish button now. Then find the listing on a real device: search for it, install it, open it once.</span>
+            <span class="path"><b>Your public URL</b> <span class="inline-code">https://play.google.com/store/apps/details?id=&lt;your.package.name&gt;</span></span>
+            <details class="why"><summary>Why</summary>
+              <p>&ldquo;Approved&rdquo; and &ldquo;findable&rdquo; are different moments — listing propagation across regions takes from minutes to a day or two. The install-it-yourself ritual catches the last-mile embarrassments (a listing typo, a wrong screenshot, a first-run crash on a clean device) while the audience is still one person.</p>
+            </details>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </section>
+
+  <section class="phase" id="p11">
+    <div class="phase-head">
+      <div class="phase-no">11</div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Release &amp; monitor</div>
+        <div class="tags"><span class="tag release">Every release</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <p class="intro">Launch is a beginning, not a finish line. Play is unusually mechanical about post-launch quality — crash and ANR rates directly change your visibility — so the monitoring here is leverage, not hygiene.</p>
+      <ul class="steps">
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p11-1"><span class="step-text"><span class="step-title">For updates: use a staged rollout</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Release to a percentage of users (say 10–20%), watch vitals, then expand to 100%. First-time releases go to everyone; the staging option appears from your first update on.</span>
+            <span class="path"><b>Guide</b> <a href="https://support.google.com/googleplay/android-developer/answer/6346149" target="_blank" rel="noopener">staged rollouts</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>A bug that reaches 10% of users is an incident; the same bug at 100% is your rating for the next six months. Staging costs one extra click and a day of patience — the cheapest insurance in the whole release loop, and the habit to build on update number one.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p11-2"><span class="step-text"><span class="step-title">Know where the halt button is</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">A staged rollout can be halted instantly — no one new gets the bad build while you fix and roll a new version. Find the button before you need it.</span>
+            <span class="path"><b>Where</b> Play Console → your app → Release → Production → the active release's <b>Halt rollout</b> (also in the Play Console phone app)</span>
+            <details class="why"><summary>Why</summary>
+              <p>Halting is damage control, not rollback — users who already updated keep the build, but the bleeding stops. The reason to locate it in advance: you'll want it during the worst hour of your launch week, on your phone, not after a frantic search of an unfamiliar menu.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p11-3"><span class="step-text"><span class="step-title">Watch Android vitals — the thresholds are real</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Crash rate and ANR (&ldquo;app not responding&rdquo;) rate, against Google's bad-behavior thresholds — currently around 1.1% for user-perceived crashes and 0.5% for ANRs. Exceeding them suppresses your visibility.</span>
+            <span class="path"><b>Go</b> Play Console → your app → Monitor and improve → <b>Android vitals</b> &nbsp;·&nbsp; <b>Guide</b> <a href="https://support.google.com/googleplay/android-developer/answer/9844486" target="_blank" rel="noopener">Android vitals</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>This is the mechanical part: Play demotes apps over the thresholds in search and browse, and can put a warning on the listing itself. It's also your free crash reporter — stack traces by device and OS version with no SDK added. The first 48 hours after any release is when a regression shows here first, before the reviews arrive to tell you about it less politely.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p11-4"><span class="step-text"><span class="step-title">Respond to the reviews that need it</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Reply to bug reports, confusion, and fixable complaints — replies are public, and reviewers get notified and can update their rating.</span>
+            <span class="path"><b>Go</b> Play Console → your app → Monitor and improve → Ratings and reviews → <b>Reviews</b></span>
+            <details class="why"><summary>Why</summary>
+              <p>A one-star &ldquo;crashes on open&rdquo; answered with &ldquo;fixed in today's update — would you give it another try?&rdquo; becomes a four-star more often than seems plausible. Every reply is also read by future browsers deciding whether the developer is alive. Skip the thank-you replies to five-star reviews; answer the fixable ones.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p11-5"><span class="step-text"><span class="step-title">Grab your store link and an official badge</span></span></label>
+          <div class="step-body">
+            <span class="path"><b>Link</b> <span class="inline-code">https://play.google.com/store/apps/details?id=&lt;your.package.name&gt;</span> &nbsp;·&nbsp; <b>Badge</b> <a href="https://play.google.com/intl/en_us/badges/" target="_blank" rel="noopener">&ldquo;Get it on Google Play&rdquo; generator</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>The badge generator produces the licensed artwork in every language — using it keeps you inside Google's brand rules, and the recognized badge converts better on a website than any hand-made button. This is the link for your site, your email signature, and the &ldquo;it's live&rdquo; post.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p11-6"><span class="step-text"><span class="step-title">Calendar the annual target-API deadline</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Every August 31, Play's target-API floor rises. Existing apps that fall too far behind stop being visible to new users on newer devices. Set a yearly reminder for June to check and bump.</span>
+            <span class="path"><b>The requirement</b> <a href="https://support.google.com/googleplay/android-developer/answer/11926878" target="_blank" rel="noopener">target API level requirements</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>The launch checklist item that outlives the launch: a finished, stable app that nobody touches for two years quietly vanishes from search for most users — not removed, just hidden — and the fix is usually one number in <span class="inline-code">build.gradle</span>, a test pass, and a routine update. The June reminder turns an emergency into an afternoon.</p>
+            </details>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </section>
+
+  <section class="phase" id="p12">
+    <div class="phase-head">
+      <div class="phase-no">12</div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Monetization</div>
+        <div class="tags"><span class="tag app">Per app · only if you're charging</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <p class="intro">Selling digital things inside the app — premium unlocks, subscriptions, coins. Prerequisite: the Phase 02 payments profile. The governing rule: digital goods go through Google Play's billing system, full stop.</p>
+      <ul class="steps">
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p12-1"><span class="step-text"><span class="step-title">Know the rule: digital goods use Play Billing</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Anything consumed <em>in</em> the app (features, content, subscriptions) must use Google Play's billing system. Physical goods and real-world services are exempt and use whatever processor you like.</span>
+            <span class="path"><b>Docs</b> <a href="https://developer.android.com/google/play/billing" target="_blank" rel="noopener">Play Billing overview</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>Routing around it — a credit-card form for a premium unlock, a &ldquo;pay on our website&rdquo; link — is a removal-grade violation, same as iOS. The service fee is the price of the rails. (Regional exceptions for alternative billing exist in a few jurisdictions; they're paperwork-heavy and nothing a first app should design around.)</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p12-2"><span class="step-text"><span class="step-title">Create the products</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">One-time products and subscriptions, each with an ID, name, and price. Product IDs are permanent once used — name them like the identifiers they are (<span class="inline-code">premium_monthly</span>, not <span class="inline-code">test1</span>).</span>
+            <span class="path"><b>Go</b> Play Console → your app → Monetize → Products → <b>In-app products</b> / <b>Subscriptions</b></span>
+            <details class="why"><summary>Why</summary>
+              <p>The app queries these by ID at runtime — code and Console must agree on the exact strings, and a shipped ID is forever (users own purchases against it). Subscriptions carry the design decisions: base plans, offers, trials, and grace periods all live on the product, not in your code.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p12-3"><span class="step-text"><span class="step-title">Wire the app to Play Billing</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">The Play Billing Library natively, or the wrapper your stack uses (Capacitor/RN plugins, RevenueCat, etc.). Purchases must be acknowledged after grant, or Play automatically refunds them.</span>
+            <details class="why"><summary>Why</summary>
+              <p>The acknowledgment rule is the classic first-integration bug: everything works, money arrives, and three days later every purchase silently refunds because the app never acknowledged them. Whatever library you use, confirm it acknowledges — and that entitlement is checked on restore/reinstall, because &ldquo;I paid and lost my premium&rdquo; is the angriest review there is.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p12-4"><span class="step-text"><span class="step-title">Add license testers</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Gmail addresses listed account-wide as license testers can make test purchases with no real charge, with shortened subscription periods for testing renewals.</span>
+            <span class="path"><b>Go</b> Play Console (account level) → Settings → <b>License testing</b> &nbsp;·&nbsp; <b>Guide</b> <a href="https://support.google.com/googleplay/android-developer/answer/6062777" target="_blank" rel="noopener">test with application licensing</a></span>
+            <details class="why"><summary>Why</summary>
+              <p>Real product IDs, real purchase flow, fake money — the only honest way to test the whole pipeline including renewal and cancellation. Subscription periods compress (a month becomes minutes), so a full subscribe→renew→cancel→expire cycle is an afternoon instead of two months of waiting.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p12-5"><span class="step-text"><span class="step-title">Test the full purchase → restore → cancel loop</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">As a license tester on a real device: buy, confirm the unlock, reinstall and confirm restore, cancel and confirm graceful expiry.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Each leg fails independently and only shows on device: the buy can work while restore doesn't (entitlement checked only at purchase), and expiry can lock users out mid-grace-period. Fifteen minutes of walking the loop is the difference between shipping a store and shipping a support queue.</p>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <label class="step-row"><input type="checkbox" data-key="gp-p12-6"><span class="step-text"><span class="step-title">Disclose terms where the purchase happens</span></span></label>
+          <div class="step-body">
+            <span class="step-detail">Price, billing period, trial terms, and how to cancel — visible on the paywall itself, with Terms and Privacy links. Then keep the Data safety form consistent with any purchase data collected.</span>
+            <details class="why"><summary>Why</summary>
+              <p>Subscription-transparency rules are enforced at review and by consumer law: a paywall that hides the renewal price behind a tap, or buries &ldquo;cancel anytime&rdquo; is a rejection on its own. The boring paywall that states the price twice is the one that passes — and converts fine anyway.</p>
+            </details>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </section>
+
+  <section class="phase" id="p13">
+    <div class="phase-head">
+      <div class="phase-no">13</div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Your next app</div>
+        <div class="tags"><span class="tag once">Read once, reuse forever</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <p class="intro">What carries over to app number two, and what you have to do again from scratch.</p>
+
+      <p class="intro">The whole point of tagging every phase above: here's exactly what carries over, so app number two takes an afternoon — plus, on a personal account, one unavoidable fortnight.</p>
+      <div class="table-scroll">
+        <table class="fact-table wide">
+          <thead><tr><th>Already done — never again</th><th>Detail</th></tr></thead>
+          <tbody>
+            <tr><td>Developer account &amp; $25</td><td>Phase 01 — register once, ship unlimited apps under it, no renewal ever</td></tr>
+            <tr><td>Identity verification</td><td>Phase 01 — account-level; done</td></tr>
+            <tr><td>Payments profile, tax, 15% tier</td><td>Phase 02 — set once; only revisit if payout details change</td></tr>
+            <tr><td>Android Studio &amp; SDK setup</td><td>Phase 03 — per machine, not per app</td></tr>
+            <tr><td>Upload keystore <em>file</em></td><td>Phase 04 — one keystore file can hold a key per app (or one shared key); either way the backup discipline is already in place</td></tr>
+            <tr><td>License testers</td><td>Phase 12 — account-level list, applies to everything you sell</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-scroll">
+        <table class="fact-table wide">
+          <thead><tr><th>Repeat every time</th><th>Detail</th></tr></thead>
+          <tbody>
+            <tr><td>Package name + app record</td><td>Phase 04 — new identifier, new Play Console entry, new free/paid decision</td></tr>
+            <tr><td><b>The 12-tester closed test</b></td><td>Phase 06 — <b>per app</b> on personal accounts; the 14-day clock restarts for every new app. Organization accounts skip it, every time.</td></tr>
+            <tr><td>Listing, declarations, countries</td><td>Phases 07–09 — written fresh for what this specific app does</td></tr>
+            <tr><td>Build → tracks → rollout</td><td>Phases 05–11 — the release loop, once per version, forever</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">Shipping more than two or three apps, or updating any of them often? Look at <a href="https://fastlane.tools" target="_blank" rel="noopener">fastlane</a> (its <span class="inline-code">supply</span> action scripts Play uploads and listings) or the <a href="https://github.com/Triple-T/gradle-play-publisher" target="_blank" rel="noopener">Gradle Play Publisher</a> plugin — both talk to the Play Developer API with a service account instead of your login. Neither is worth the setup time for a first app; both start paying for themselves by the third release. And re-run <span class="inline-code">SKILL.md</span> on the next app — Phase 00 above is exactly as automatable there as it was here.</div>
+    </div>
+  </section>
+
+  <section class="phase appendix" id="gloss">
+    <div class="phase-head">
+      <div class="phase-no">A</div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Glossary</div>
+        <div class="tags"><span class="tag once">Reference</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <p class="intro">Google's screens and error messages assume you already know these words. Nothing else in this file requires reading it in order — come back when a term bites.</p>
+      <dl class="kv">
+        <dt>Play Console</dt>
+        <dd>The website where your apps, listings, releases, testers, declarations and money live. <a href="https://play.google.com/console/" target="_blank" rel="noopener">play.google.com/console</a>.</dd>
+
+        <dt>Developer account</dt>
+        <dd>Your $25-once Play Console registration — personal or organization. The permanent owner of every app you publish.</dd>
+
+        <dt>Package name / <code>applicationId</code></dt>
+        <dd>Your app's permanent true name, in reverse-DNS form: <code>com.yourname.appname</code>. Cannot be changed after first upload; <code>com.example.*</code> is refused.</dd>
+
+        <dt>AAB / Android App Bundle</dt>
+        <dd>The <code>.aab</code> publishing format Play requires. Not installable itself — Play generates optimized per-device APKs from it.</dd>
+
+        <dt>APK</dt>
+        <dd>The installable app file format. What devices actually run; what Play builds <em>from</em> your bundle. You only handle one directly for local testing.</dd>
+
+        <dt>Gradle</dt>
+        <dd>Android's build system. <code>./gradlew</code> is the per-project wrapper script; <code>build.gradle</code> holds the app's identity and version facts.</dd>
+
+        <dt>Keystore</dt>
+        <dd>A password-protected file (<code>.jks</code>) holding signing keys. Never committed to git, always backed up in more than one place.</dd>
+
+        <dt>Upload key</dt>
+        <dd>The key <em>you</em> hold and sign uploads with. Proves a bundle came from you. Lost ones can be reset through Play Console support.</dd>
+
+        <dt>App signing key</dt>
+        <dd>The key <em>Google</em> holds under Play App Signing — the one devices actually verify. You never touch it and can't lose it.</dd>
+
+        <dt>Play App Signing</dt>
+        <dd>The default two-key system: you sign with the upload key, Google re-signs for delivery with the app signing key. The source of every &ldquo;wrong key&rdquo; error message.</dd>
+
+        <dt><code>versionCode</code> vs <code>versionName</code></dt>
+        <dd><b>versionCode</b> is an internal integer that must strictly increase on every upload. <b>versionName</b> (<code>1.2.0</code>) is what users see.</dd>
+
+        <dt>Target API level / <code>targetSdkVersion</code></dt>
+        <dd>The Android version your app declares it's built for. Play enforces a floor that rises every August 31; too old = upload refused, or the app hidden from newer devices.</dd>
+
+        <dt>Track</dt>
+        <dd>A release channel: internal testing, closed testing, open testing, or production. Builds promote between tracks without rebuilding.</dd>
+
+        <dt>Internal testing</dt>
+        <dd>Instant distribution to up to 100 listed testers, no review. Your fastest loop.</dd>
+
+        <dt>Closed testing</dt>
+        <dd>Invite-only track (email lists or Google Groups). The only track that counts toward the 12-tester production-access requirement.</dd>
+
+        <dt>Open testing</dt>
+        <dd>Public beta — anyone with the link can join. Can run alongside production.</dd>
+
+        <dt>Opt-in link</dt>
+        <dd>The URL a tester must personally accept before Play will show them the test build. Being on the email list alone does nothing.</dd>
+
+        <dt>Production access</dt>
+        <dd>Permission for a new personal account's app to release publicly — granted on application after the 12-testers-for-14-days closed test.</dd>
+
+        <dt>Pre-launch report</dt>
+        <dd>Google's automatic robo-test of each track upload on a fleet of real devices: crashes, layout, accessibility, security findings.</dd>
+
+        <dt>Data safety</dt>
+        <dd>The form declaring what data the app collects and shares, rendered as the privacy section on your listing. Verified against actual app behavior.</dd>
+
+        <dt>Content rating / IARC</dt>
+        <dd>The questionnaire that generates official age ratings for every region at once. Unrated apps get removed.</dd>
+
+        <dt>Managed publishing</dt>
+        <dd>A switch that holds approved changes until you explicitly press publish — decoupling &ldquo;passed review&rdquo; from &ldquo;went live&rdquo;.</dd>
+
+        <dt>Staged rollout</dt>
+        <dd>Releasing an update to a percentage of users, expandable or haltable. Available from your first update on.</dd>
+
+        <dt>Android vitals</dt>
+        <dd>Play's built-in quality telemetry — crash rate, ANR rate, battery misbehavior — with thresholds that affect your store visibility when exceeded.</dd>
+
+        <dt>ANR</dt>
+        <dd>&ldquo;Application Not Responding&rdquo; — the app's UI thread froze long enough that Android offered the user a kill button. Counts against vitals like a crash.</dd>
+
+        <dt>Play Billing</dt>
+        <dd>Google's in-app purchase system. Anything selling digital goods inside an Android app on Play must use it.</dd>
+
+        <dt>License tester</dt>
+        <dd>A Gmail address allowed to make test purchases with no real charge and compressed subscription periods.</dd>
+
+        <dt>Policy status</dt>
+        <dd>The Console page listing every policy finding against your app — where rejection details and appeal links live.</dd>
+
+        <dt>Trader status (DSA)</dt>
+        <dd>An EU Digital Services Act declaration with publicly-shown, verified contact details. Required to distribute in the EU.</dd>
+
+        <dt>D-U-N-S Number</dt>
+        <dd>A nine-digit business identifier from Dun &amp; Bradstreet — Google's third-party proof that an organization legally exists.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="phase appendix" id="trouble">
+    <div class="phase-head">
+      <div class="phase-no">B</div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">When it goes wrong</div>
+        <div class="tags"><span class="tag once">Reference</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <p class="intro">The failures that actually happen, in the words Google uses for them. Find your symptom, not your diagnosis.</p>
+
+      <p class="howto-label" style="margin-top:18px">Build &amp; upload errors</p>
+      <div class="table-scroll">
+        <table class="fact-table wide">
+          <thead><tr><th>What you see</th><th>What it means &amp; what to do</th></tr></thead>
+          <tbody>
+            <tr><td>&ldquo;Version code X has already been used&rdquo;</td><td>You reused a <span class="inline-code">versionCode</span> — Play counts every past upload, failed ones included. Bump it in <span class="inline-code">build.gradle</span>, rebuild, re-upload. Phase 05, step 2.</td></tr>
+            <tr><td>&ldquo;Your Android App Bundle is signed with the wrong key&rdquo;</td><td>The bundle wasn't signed with this app's registered upload key — usually a second keystore lying around, or a fresh one after a laptop change. Sign with the original, or request an upload-key reset via <a href="https://support.google.com/googleplay/android-developer/answer/9842756" target="_blank" rel="noopener">Play App Signing</a> support.</td></tr>
+            <tr><td>&ldquo;You uploaded a debuggable APK or Android App Bundle&rdquo;</td><td>The release build has <span class="inline-code">debuggable true</span> — you probably uploaded a debug build by mistake. Build <span class="inline-code">bundleRelease</span> and check the output path.</td></tr>
+            <tr><td>&ldquo;You need to use a different package name&rdquo; on <span class="inline-code">com.example.*</span></td><td>Play refuses the scaffold default outright. Set a real <span class="inline-code">applicationId</span> — Phase 04, step 1.</td></tr>
+            <tr><td>Upload refused for target API level</td><td>The bundle targets below Play's current floor. Raise <span class="inline-code">targetSdkVersion</span>, fix what the runtime changes break, re-upload. See the <a href="https://support.google.com/googleplay/android-developer/answer/11926878" target="_blank" rel="noopener">current requirement</a>.</td></tr>
+            <tr><td><span class="inline-code">SDK location not found</span></td><td>Gradle can't find the Android SDK — missing <span class="inline-code">local.properties</span>/<span class="inline-code">ANDROID_HOME</span> on this machine. Open the project once in Android Studio (it writes the file), or set the env var. Phase 03, step 3.</td></tr>
+            <tr><td><span class="inline-code">Failed to install the following Android SDK packages … licences have not been accepted</span></td><td>Run <span class="inline-code">sdkmanager --licenses</span> and accept. Phase 03, step 3.</td></tr>
+            <tr><td>Gradle sync fails the moment the project opens</td><td>Usually a JDK/Gradle version mismatch or half-downloaded dependencies. Let the first sync finish on a good connection; use Studio's embedded JDK before debugging exotic causes.</td></tr>
+            <tr><td>Release build crashes where debug didn't</td><td>Minification (R8) stripped something reflection needed, or a debug-only flag gated real behavior. Check the pre-launch report's stack trace; add keep rules or fix the flag. Phase 05, step 5 exists for exactly this.</td></tr>
+            <tr><td>App installs but shows last week's interface</td><td>Web assets were never rebuilt/synced before the native build. Re-run the build+sync step — Phase 05, step 1.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="howto-label" style="margin-top:26px">Play Console confusion</p>
+      <div class="table-scroll">
+        <table class="fact-table wide">
+          <thead><tr><th>What you see</th><th>What it means &amp; what to do</th></tr></thead>
+          <tbody>
+            <tr><td>Can't create a production release at all</td><td>Personal account without production access yet — the 12-tester closed test hasn't been run/passed. Phase 06. There is no way to skip it.</td></tr>
+            <tr><td>Rollout button greyed out, no clear reason</td><td>An incomplete App content declaration or missing listing asset. The Dashboard's task list names it — Phase 10, step 1.</td></tr>
+            <tr><td>Testers say they can't find or install the test build</td><td>They never opened the opt-in link (the email list alone does nothing), or they're signed into a different Google account on the phone. Re-send the link with instructions — Phase 06, step 3.</td></tr>
+            <tr><td>&ldquo;Why can't I set a price / create in-app products?&rdquo;</td><td>No payments profile linked. Phase 02.</td></tr>
+            <tr><td>Approved days ago, still not live</td><td>Managed publishing is on and holding it — press publish. Phase 10, step 2. (Or it's live and still propagating regionally; check the direct listing URL.)</td></tr>
+            <tr><td>Want to switch a free app to paid</td><td>Impossible, permanently. The revenue path is in-app purchases (Phase 12) — or a new app record with a new package name and zero installs.</td></tr>
+            <tr><td>App vanished from the EU store</td><td>Trader status wasn't declared/verified. Phase 08, step 10.</td></tr>
+            <tr><td>Screenshot or icon upload silently refused</td><td>Alpha channel in a PNG, or dimensions outside spec. Flatten and check against the <a href="https://support.google.com/googleplay/android-developer/answer/9866151" target="_blank" rel="noopener">asset specs</a>.</td></tr>
+            <tr><td>Every purchase refunds itself after ~3 days</td><td>Purchases aren't being acknowledged. Fix the billing integration — Phase 12, step 3.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="howto-label" style="margin-top:26px">Common rejections &amp; removals, by policy</p>
+      <div class="table-scroll">
+        <table class="fact-table wide">
+          <thead><tr><th>Policy area</th><th>Why it happened</th></tr></thead>
+          <tbody>
+            <tr><td><b>Data safety</b> — inaccurate declaration</td><td>The form says one thing, the binary does another — an SDK collecting what you didn't declare is the classic. Re-grep, fix the form, resubmit. Can strike <em>after</em> launch.</td></tr>
+            <tr><td><b>User Data</b> — privacy policy</td><td>Link dead, page generic, or policy contradicts the Data safety form. Must be live, specific to this app, and linked both in Console and in-app.</td></tr>
+            <tr><td><b>User Data</b> — account deletion</td><td>Accounts can be created but not deleted in-app, or the required web deletion link is missing/broken.</td></tr>
+            <tr><td><b>Spam &amp; Minimum Functionality</b></td><td>The app is a repackaged website or too thin to justify being an app — the most common death sentence for a first web-shell app. It needs to do something a bookmark can't (offline, notifications, native integration).</td></tr>
+            <tr><td><b>Metadata</b></td><td>Keyword-stuffed title, screenshots showing features that don't exist, or competitor names in your listing text.</td></tr>
+            <tr><td><b>Permissions</b></td><td>A restricted permission (SMS, call log, all-files access, background location, accessibility) without an approved declaration and a core-functionality justification.</td></tr>
+            <tr><td><b>Families</b></td><td>The target-audience declaration includes children but the app doesn't meet Families ads/data requirements — or clearly appeals to kids while declaring it doesn't.</td></tr>
+            <tr><td><b>Payments</b></td><td>Digital goods sold outside Play Billing — a card form or external payment link for in-app content.</td></tr>
+            <tr><td><b>Subscriptions</b> — transparency</td><td>Renewal price, period, or cancellation not disclosed on the paywall before purchase.</td></tr>
+            <tr><td><b>Intellectual property</b></td><td>A trademark, brand, or content you don't have rights to — in the app, the name, the icon, or the screenshots.</td></tr>
+            <tr><td><b>Deceptive behavior</b></td><td>The app does something the listing doesn't say, or claims functionality it doesn't have.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="howto-label" style="margin-top:26px">Where to get help from a human</p>
+      <ul class="linkcols">
+        <li><a href="https://support.google.com/googleplay/android-developer/" target="_blank" rel="noopener">Play Console Help</a> — every help page, plus the contact routes at the bottom of each</li>
+        <li><a href="https://support.google.com/googleplay/android-developer/community" target="_blank" rel="noopener">Play Developer Community</a> — other developers, and Google community managers</li>
+        <li><a href="https://status.play.google.com/" target="_blank" rel="noopener">Play status dashboard</a> — check before debugging; it's occasionally just down</li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/14151465" target="_blank" rel="noopener">Testing-requirement help</a> — the 12-tester rule's own page, with its FAQ</li>
+        <li><a href="https://play.google.com/about/developer-content-policy/" target="_blank" rel="noopener">Developer Program Policies</a> — the full policy text every rejection cites</li>
+        <li><a href="https://playacademy.withgoogle.com/" target="_blank" rel="noopener">Play Academy</a> — Google's free courses on all of this, including policy</li>
+      </ul>
+      <div class="note">Rejection emails and the <b>Policy status</b> page include the appeal link for that specific finding. Appeals written like bug reports — what the policy says, what the app actually does, where the reviewer can verify it — get overturned; appeals written like grievances don't.</div>
+    </div>
+  </section>
+
+  <section class="phase appendix" id="links">
+    <div class="phase-head">
+      <div class="phase-no">C</div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Every link</div>
+        <div class="tags"><span class="tag once">Reference</span></div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <p class="intro">Everything referenced above, in one place. All checked working when this file was written — Google does reorganise its help center, so if one 404s, search the title from <a href="https://support.google.com/googleplay/android-developer/" target="_blank" rel="noopener">Play Console Help</a>.</p>
+
+      <p class="howto-label" style="margin-top:18px">The two websites</p>
+      <ul class="linkcols">
+        <li><a href="https://play.google.com/console/" target="_blank" rel="noopener">play.google.com/console</a> — apps, releases, declarations, money</li>
+        <li><a href="https://developer.android.com/" target="_blank" rel="noopener">developer.android.com</a> — tools, SDK, build documentation</li>
+        <li><a href="https://support.google.com/googleplay/android-developer/" target="_blank" rel="noopener">Play Console Help</a> — the help center for everything Console</li>
+        <li><a href="https://play.google.com/console/signup" target="_blank" rel="noopener">→ Register ($25, once)</a></li>
+        <li><a href="https://play.google.com/about/developer-content-policy/" target="_blank" rel="noopener">Developer Program Policies</a></li>
+        <li><a href="https://playacademy.withgoogle.com/" target="_blank" rel="noopener">Play Academy (free courses)</a></li>
+      </ul>
+
+      <p class="howto-label" style="margin-top:26px">Account &amp; registration</p>
+      <ul class="linkcols">
+        <li><a href="https://accounts.google.com/" target="_blank" rel="noopener">Create / manage a Google account</a></li>
+        <li><a href="https://support.google.com/accounts/answer/185839" target="_blank" rel="noopener">Turn on 2-Step Verification</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/6112435" target="_blank" rel="noopener">Register for a developer account</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/13628312" target="_blank" rel="noopener">Required registration information</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/10788890" target="_blank" rel="noopener">Play Console requirements</a></li>
+        <li><a href="https://www.dnb.com/duns.html" target="_blank" rel="noopener">D-U-N-S lookup / apply</a></li>
+      </ul>
+
+      <p class="howto-label" style="margin-top:26px">Money</p>
+      <ul class="linkcols">
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/7161426" target="_blank" rel="noopener">Create a payments profile</a></li>
+        <li><a href="https://pay.google.com/" target="_blank" rel="noopener">pay.google.com (payments profile home)</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/112622" target="_blank" rel="noopener">Service fees</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/10632485" target="_blank" rel="noopener">15% tier — service-fee changes</a></li>
+      </ul>
+
+      <p class="howto-label" style="margin-top:26px">Tools</p>
+      <ul class="linkcols">
+        <li><a href="https://developer.android.com/studio" target="_blank" rel="noopener">Android Studio (Win/Mac/Linux)</a></li>
+        <li><a href="https://developer.android.com/tools/bundletool" target="_blank" rel="noopener">bundletool (install/test an .aab)</a></li>
+        <li><a href="https://play.google.com/store/apps/details?id=com.google.android.apps.playconsole" target="_blank" rel="noopener">Play Console app (Android)</a></li>
+        <li><a href="https://play.google.com/intl/en_us/badges/" target="_blank" rel="noopener">&ldquo;Get it on Google Play&rdquo; badge generator</a></li>
+        <li><a href="https://fastlane.tools" target="_blank" rel="noopener">fastlane (supply)</a></li>
+        <li><a href="https://github.com/Triple-T/gradle-play-publisher" target="_blank" rel="noopener">Gradle Play Publisher</a></li>
+      </ul>
+
+      <p class="howto-label" style="margin-top:26px">Building &amp; signing</p>
+      <ul class="linkcols">
+        <li><a href="https://developer.android.com/guide/app-bundle" target="_blank" rel="noopener">About Android App Bundles</a></li>
+        <li><a href="https://developer.android.com/studio/publish/app-signing" target="_blank" rel="noopener">Sign your app (keystores, upload keys)</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/9842756" target="_blank" rel="noopener">Use Play App Signing</a></li>
+        <li><a href="https://developer.android.com/studio/publish/versioning" target="_blank" rel="noopener">Version your app (versionCode)</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/11926878" target="_blank" rel="noopener">Target API level requirements</a></li>
+        <li><a href="https://developer.android.com/develop/ui/views/launch/icon_design_adaptive" target="_blank" rel="noopener">Adaptive icons</a></li>
+        <li><a href="https://developer.android.com/develop/ui/views/launch/splash-screen" target="_blank" rel="noopener">Splash screen API</a></li>
+        <li><a href="https://developer.android.com/guide/topics/permissions/overview" target="_blank" rel="noopener">Permissions overview</a></li>
+      </ul>
+
+      <p class="howto-label" style="margin-top:26px">Testing &amp; the 12-tester gate</p>
+      <ul class="linkcols">
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/9845334" target="_blank" rel="noopener">Set up an open, closed, or internal test</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/14151465" target="_blank" rel="noopener">Testing requirements for new personal accounts</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/community-guide/255621488" target="_blank" rel="noopener">Everything about the 12-testers requirement</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/6334373" target="_blank" rel="noopener">Pre-launch reports</a></li>
+      </ul>
+
+      <p class="howto-label" style="margin-top:26px">Listing &amp; releasing</p>
+      <ul class="linkcols">
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/9859152" target="_blank" rel="noopener">Create and set up your app</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/9866151" target="_blank" rel="noopener">Preview assets (icon, feature graphic, screenshots)</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/9859348" target="_blank" rel="noopener">Prepare and roll out a release</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/9859751" target="_blank" rel="noopener">Publish your app (statuses)</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/9859654" target="_blank" rel="noopener">Managed publishing</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/6346149" target="_blank" rel="noopener">Staged rollouts</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/9844486" target="_blank" rel="noopener">Android vitals</a></li>
+      </ul>
+
+      <p class="howto-label" style="margin-top:26px">Privacy &amp; compliance</p>
+      <ul class="linkcols">
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/10787469" target="_blank" rel="noopener">Data safety section</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/13327111" target="_blank" rel="noopener">Account deletion requirements</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/188189" target="_blank" rel="noopener">Content rating requirements</a></li>
+        <li><a href="https://www.globalratings.com/" target="_blank" rel="noopener">IARC (the rating system)</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/9867159" target="_blank" rel="noopener">Target audience &amp; content settings</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/9893335" target="_blank" rel="noopener">Families policies</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/9857753" target="_blank" rel="noopener">Ads declaration</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/9859455" target="_blank" rel="noopener">Prepare your app for review (App access)</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/14659200" target="_blank" rel="noopener">EEA conditions (DSA / trader status)</a></li>
+      </ul>
+
+      <p class="howto-label" style="margin-top:26px">Monetization</p>
+      <ul class="linkcols">
+        <li><a href="https://developer.android.com/google/play/billing" target="_blank" rel="noopener">Play Billing overview</a></li>
+        <li><a href="https://support.google.com/googleplay/android-developer/answer/6062777" target="_blank" rel="noopener">License testing (test purchases)</a></li>
+      </ul>
+
+      <p class="howto-label" style="margin-top:26px">Help from a human</p>
+      <ul class="linkcols">
+        <li><a href="https://support.google.com/googleplay/android-developer/community" target="_blank" rel="noopener">Play Developer Community</a></li>
+        <li><a href="https://status.play.google.com/" target="_blank" rel="noopener">Play status dashboard</a></li>
+      </ul>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  (function () {
+    var boxes = Array.prototype.slice.call(document.querySelectorAll('input[type="checkbox"][data-key]'));
+    var STORAGE_KEY = 'launch-manifest-progress-v3';
+
+    function load() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+      catch (e) { return {}; }
+    }
+    function save(state) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+    }
+
+    function updateProgress() {
+      var checked = boxes.filter(function (b) { return b.checked; }).length;
+      document.getElementById('progressText').textContent = checked + ' / ' + boxes.length + ' checked';
+      document.getElementById('progressFill').style.width = (boxes.length ? (checked / boxes.length * 100) : 0) + '%';
+    }
+
+    var state = load();
+    boxes.forEach(function (b) {
+      if (b.disabled) return;   // agent-completed: counts toward progress, skips localStorage
+      if (state[b.dataset.key]) b.checked = true;
+      b.addEventListener('change', function () {
+        state[b.dataset.key] = b.checked;
+        save(state);
+        updateProgress();
+      });
+    });
+
+    updateProgress();
+
+    document.getElementById('resetBtn').addEventListener('click', function () {
+      boxes.forEach(function (b) {
+        if (b.disabled) return;
+        b.checked = false;
+        delete state[b.dataset.key];
+      });
+      save(state);
+      updateProgress();
+    });
+
+    var whys = Array.prototype.slice.call(document.querySelectorAll('details.why'));
+    var whyBtn = document.getElementById('whyAllBtn');
+    whyBtn.addEventListener('click', function () {
+      var open = whys.some(function (d) { return !d.open; });
+      whys.forEach(function (d) { d.open = open; });
+      whyBtn.textContent = open ? 'Collapse every \u201Cwhy\u201D' : 'Expand every \u201Cwhy\u201D';
+    });
+  })();
+</script>
